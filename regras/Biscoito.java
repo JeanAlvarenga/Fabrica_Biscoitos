@@ -1,13 +1,14 @@
 public abstract class Biscoito{
     // Atributos
-    private final int constanteDeTempo = 1;
+    private final int constanteDeTempo;
     private double ingrediente1, ingrediente2, ingrediente3;
 
     // Construtor
-    public Biscoito(double ingrediente1, double ingrediente2, double ingrediente3) {
+    public Biscoito(double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo){
         this.ingrediente1 = ingrediente1;
         this.ingrediente2 = ingrediente2;
         this.ingrediente3 = ingrediente3;
+        this.constanteDeTempo = constanteDeTempo;
     }
 
     /**

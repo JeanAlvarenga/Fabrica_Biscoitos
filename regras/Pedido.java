@@ -2,7 +2,8 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 public class Pedido {
-    Queue <Biscoito> biscoitos;
+    // Atributos
+    private Queue <Biscoito> biscoitos;
 
     public Pedido(){
         biscoitos = new LinkedList<Biscoito>();
@@ -21,6 +22,8 @@ public class Pedido {
      * @return Biscoito. Primeiro biscoito da fila
      */
     public Biscoito getBiscoito(){
-        return biscoitos.poll();
+        Biscoito b = biscoitos.poll();
+        System.out.println(b.timeIngrediente1());
+        return b;
     }
 }

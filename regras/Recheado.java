@@ -3,8 +3,8 @@ public class Recheado extends Biscoito{
      /**
      * Construtor
      */
-    public Recheado(double ingrediente1, double ingrediente2, double ingrediente3) {
-        super(ingrediente1, ingrediente2, ingrediente3);
+    public Recheado(double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo) {
+        super(ingrediente1, ingrediente2, ingrediente3, constanteDeTempo);
     }
     
     @Override
