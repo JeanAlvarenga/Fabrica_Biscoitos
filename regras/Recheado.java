@@ -1,5 +1,6 @@
 public class Recheado extends Biscoito{
     private double pesoBiscoito = 0.1;
+    private double cte = 1.2;
      /**
      * Construtor
      */
@@ -9,7 +10,7 @@ public class Recheado extends Biscoito{
     
     @Override
     public double calcularTempo() {
-        return 1.2 * calcularQuantidadeIngredientes() * getConstanteDeTempo();
+        return cte * calcularQuantidadeIngredientes() * getConstanteDeTempo();
     }
 
     @Override

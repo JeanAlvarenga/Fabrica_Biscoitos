@@ -30,7 +30,7 @@ public class TelaInterface {
 		//Quando clicamos no botão é executad o método addBiscoito da classe Pedido.
 		botao1.addActionListener(new AcaoBotao(listaTiposBiscoitos, primeiro, segundo, terceiro, tamFila));
 
-		//botao2.addActionListener(botao2.getActionListeners()[0]);
+		botao2.addActionListener(new Processo());
 		
 		JPanel painel = new JPanel();
 		painel.add(listaTiposBiscoitos);

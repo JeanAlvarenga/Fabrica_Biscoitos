@@ -1,14 +1,11 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 public class Processo implements ActionListener{
-    private Pedido pedido;
+    private static Pedido p;
 
-    public Processo(Pedido pedido) {
-        this.pedido = pedido;
+    public Processo() {
+        p = new Pedido();
     }
 
 
@@ -17,7 +14,8 @@ public class Processo implements ActionListener{
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+        p.getBiscoito();
+        System.out.println(p.getTamanhoDaFila());
     }
     
 }

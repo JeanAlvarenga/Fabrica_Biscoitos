@@ -1,5 +1,6 @@
 public class Comum extends Biscoito{
     private double pesoBiscoito = 0.09;
+    private double cte = 1.0;
     /**
      * Construtor
      */
@@ -9,7 +10,7 @@ public class Comum extends Biscoito{
 
     @Override
     public double calcularTempo() {
-        return 1.0 * calcularQuantidadeIngredientes() * getConstanteDeTempo();
+        return cte * calcularQuantidadeIngredientes() * getConstanteDeTempo();
     }
 
     @Override

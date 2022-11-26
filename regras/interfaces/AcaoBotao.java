@@ -49,8 +49,6 @@ public class AcaoBotao implements ActionListener {
 			System.out.println("Nenhuma opção selecionada");
 		}
 		
-		//pedido.getBiscoito();
-		
 		String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
 		resultado.setText(tamanhoDaFila);
 	}
