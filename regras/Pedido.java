@@ -3,6 +3,7 @@ import java.util.LinkedList;
 
 public class Pedido {
     // Atributos
+    private static int tamanhoDaFila = 0;
     private Queue <Biscoito> biscoitos;
 
     public Pedido(){
@@ -15,6 +16,7 @@ public class Pedido {
      */
     public void addBiscoito(Biscoito biscoito){
         biscoitos.add(biscoito);
+        tamanhoDaFila++;
     }
 
     /**
@@ -23,7 +25,16 @@ public class Pedido {
      */
     public Biscoito getBiscoito(){
         Biscoito b = biscoitos.poll();
-        System.out.println(b.timeIngrediente1());
+        tamanhoDaFila--;
+        System.out.println(b.calcularTempo());
         return b;
+    }
+
+    /**
+     * Método para retornar o tamanho da fila
+     * @return int. Tamanho da fila
+     */
+    public int getTamanhoDaFila(){
+        return tamanhoDaFila;
     }
 }
