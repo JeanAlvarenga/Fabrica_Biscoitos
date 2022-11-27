@@ -59,10 +59,10 @@ public class Interface extends JFrame{
 
     public void botao(){
         //Quando clicamos no botão é executad o método addBiscoito da classe Pedido.
-        botao1.addActionListener(new AcaoBotao(listaTiposBiscoitos, primeiro, segundo, terceiro, tamFila));
+        botao1.addActionListener(new AcaoBotao1(listaTiposBiscoitos, primeiro, segundo, terceiro, tamFila));
 
         //Quando clicamos no botão é executad o método iniciarProcesso da classe Pedido.
-        botao2.addActionListener(new Processo());
+        botao2.addActionListener(new Processo(tamFila));
     }
 
     public void run(){

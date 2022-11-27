@@ -28,9 +28,9 @@ public class TelaInterface {
 		JLabel tamFila = new JLabel("           null          "); // Cria o label "null".
 		
 		//Quando clicamos no botão é executad o método addBiscoito da classe Pedido.
-		botao1.addActionListener(new AcaoBotao(listaTiposBiscoitos, primeiro, segundo, terceiro, tamFila));
+		botao1.addActionListener(new AcaoBotao1(listaTiposBiscoitos, primeiro, segundo, terceiro, tamFila));
 
-		botao2.addActionListener(new Processo());
+		botao2.addActionListener(new Processo(tamFila));
 		
 		JPanel painel = new JPanel();
 		painel.add(listaTiposBiscoitos);

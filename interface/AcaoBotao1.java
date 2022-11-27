@@ -1,11 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class AcaoBotao implements ActionListener {
+public class AcaoBotao1 implements ActionListener {
 
 	private JComboBox tipo; 
 	private JTextField primeiro; // Cria o campo de texto "primeiro".
@@ -18,7 +17,7 @@ public class AcaoBotao implements ActionListener {
     private static int constanteDeTempo = 1;
     private static Pedido pedido = new Pedido();
 
-	public AcaoBotao(JComboBox tipo, JTextField primeiro, JTextField segundo, JTextField terceiro, JLabel resultado) {
+	public AcaoBotao1(JComboBox tipo, JTextField primeiro, JTextField segundo, JTextField terceiro, JLabel resultado) {
 		this.tipo = tipo;
 		this.primeiro = primeiro;
 		this.segundo = segundo;

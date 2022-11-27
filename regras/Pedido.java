@@ -1,13 +1,15 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class Pedido {
+public class Pedido implements ActionListener {
     // Atributos
     private static int tamanhoDaFila = 0;
-    private Queue <Biscoito> biscoitos;
+    private Queue <Biscoito> biscoitos = new LinkedList<Biscoito>();
 
     public Pedido(){
-        biscoitos = new LinkedList<Biscoito>();
+        //
     }
 
     /**
@@ -26,7 +28,7 @@ public class Pedido {
     public Biscoito getBiscoito(){
         Biscoito b = biscoitos.poll();
         tamanhoDaFila--;
-        System.out.println(b.calcularTempo());
+        //System.out.println(b.calcularTempo());
         return b;
     }
 
@@ -36,5 +38,13 @@ public class Pedido {
      */
     public int getTamanhoDaFila(){
         return tamanhoDaFila;
+    }
+
+        /**
+	 * Método que é executado quando o botão é clicado.
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+        //
     }
 }
