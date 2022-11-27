@@ -34,3 +34,6 @@ Referencias:
 [11] https://www.youtube.com/watch?v=oeP_NiajWME
 [12] https://www.youtube.com/watch?v=0SyutmiLzj0&t=1159s
 [13] https://www.youtube.com/watch?v=B_zHvdkUXJg
+[14] https://www.devmedia.com.br/swing-componentes-mais-importantes-e-suas-propriedades/16113
+[15] Estruturas de Dados Filas e Pilhas - Prof. Luiz Merschmann
+[16]
