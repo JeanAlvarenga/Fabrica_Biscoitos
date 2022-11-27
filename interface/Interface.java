@@ -57,25 +57,17 @@ public class Interface extends JFrame{
 		janela.setVisible(true);
     }
 
-    public void inicializar() {
-        setTitle("Add request"); // Cria a janela com o titulo "Add request".
-        setSize(janelaW, janelaH);
-        setResizable(false);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
-    }
-
-    public void run(){
-        //inicializar();
-        desenharGraficos();
-        botao();
-        
-    }
     public void botao(){
         //Quando clicamos no botão é executad o método addBiscoito da classe Pedido.
         botao1.addActionListener(new AcaoBotao(listaTiposBiscoitos, primeiro, segundo, terceiro, tamFila));
 
         //Quando clicamos no botão é executad o método iniciarProcesso da classe Pedido.
         botao2.addActionListener(new Processo());
+    }
+
+    public void run(){
+        desenharGraficos();
+        botao();
+        
     }
 }
