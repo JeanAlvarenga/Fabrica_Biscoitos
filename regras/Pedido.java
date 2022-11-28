@@ -25,11 +25,17 @@ public class Pedido implements ActionListener {
      * Método para desenfileirar e remover biscoito da fila
      * @return Biscoito. Primeiro biscoito da fila
      */
-    public Biscoito getBiscoito(){
-        Biscoito b = biscoitos.poll();
-        tamanhoDaFila--;
-        //System.out.println(b.calcularTempo());
-        return b;
+    public  Biscoito getBiscoito(){
+        if(!biscoitos.isEmpty()){
+            Biscoito b = biscoitos.poll();
+            tamanhoDaFila--;
+            System.out.println(b.calcularTempo());
+            return b;
+        }
+        else{
+            System.out.println("Não há biscoitos na fila");
+            return null;
+        }
     }
 
     /**
