@@ -18,6 +18,6 @@ public class Canvas extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image.getScaledInstance(874, 629, 0), 0, 0, null);
+        g.drawImage(image.getScaledInstance(1117, 719, 0), 0, 0, null);
     }
 }
