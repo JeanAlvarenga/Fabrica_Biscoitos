@@ -5,7 +5,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 public class Interface extends JFrame implements ActionListener {
 	// Atributos
@@ -16,7 +15,7 @@ public class Interface extends JFrame implements ActionListener {
     // Icone das imagens no jogo
     JFrame janela = new JFrame("Add request"); // Cria a janela com o titulo "Add request".
 	// Imagens das Etapas:
-	private ImageIcon imGP1 = new ImageIcon(getClass().getResource("gotapreta1.png"));
+	private ImageIcon imGP1 = new ImageIcon(getClass().getResource("gotaAzul.png"));
 	private ImageIcon imGP2 = new ImageIcon(getClass().getResource("gotapreta2.png"));
 	private ImageIcon imGP3 = new ImageIcon(getClass().getResource("gotapreta3.png"));
 
@@ -69,7 +68,7 @@ public class Interface extends JFrame implements ActionListener {
     
 	// Cria o painel.
     public void desenharGraficos() {
-		
+		janela.setBounds(0, 0, 1117, 719);
 		// Configurações da janela
 		canvas.add(listaTiposBiscoitos);
 		canvas.add(one);
@@ -87,13 +86,14 @@ public class Interface extends JFrame implements ActionListener {
 
 		janela.add(canvas);
 		janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		janela.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//janela.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		//janela.pack();
 		janela.setVisible(true);
     }
 
 	//Método para adicionar ingrediente 1 na fila 1.
 	public void exibirGotaPreta1() {
+		GP1.setBounds(400, 400, 34, 33);
 		canvas.add(GP1);
 	}
 
