@@ -117,13 +117,12 @@ public class Interface extends JFrame implements ActionListener {
 		F2.setBounds(630, 540, 60, 73);
     }
 
-	
-
+	//
     public void botao(){
-        //Quando clicamos no botão é executad o método addBiscoito da classe Pedido.
+        //Quando clicamos no botão é executado o método addBiscoito da classe Pedido.
         botao1.addActionListener(this);
 
-        //Quando clicamos no botão é executad o método iniciarProcesso da classe Pedido.
+        //Quando clicamos no botão é executado o método iniciarProcesso da classe Pedido.
         botao2.addActionListener(this);
     }
 
@@ -133,7 +132,7 @@ public class Interface extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//Trata os eventos para o botao "botao1"
-		if( e.getSource() == botao1){
+		if(e.getSource() == botao1){
 			String s;
 			s = String.valueOf(listaTiposBiscoitos.getSelectedItem());
 			//RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "comum" PARA ARMAZENAR fila DE PEDIDOS
@@ -161,24 +160,25 @@ public class Interface extends JFrame implements ActionListener {
 			botao2.setText(" Process started ");
 			String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
 			tamFila.setText(tamanhoDaFila);
+
+			canvas.add(GP1);
+			canvas.add(GP2);
+			canvas.add(GP3);
+			canvas.add(GA1);
+			canvas.add(GA2);
+			canvas.add(GA3);
+			canvas.add(GV1);
+			canvas.add(GV2);
+			canvas.add(GV3);
+			canvas.add(F1);
+			canvas.add(F2);
+			janela.repaint();
 		}
 	}
 
     public void run(){
         desenharGraficos();
         botao();
-
-		canvas.add(GP1);
-		canvas.add(GP2);
-		canvas.add(GP3);
-		canvas.add(GA1);
-		canvas.add(GA2);
-		canvas.add(GA3);
-		canvas.add(GV1);
-		canvas.add(GV2);
-		canvas.add(GV3);
-		canvas.add(F1);
-		canvas.add(F2);
 		
 		//canvas.remove(GV2);
 
