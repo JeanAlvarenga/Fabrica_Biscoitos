@@ -1,4 +1,8 @@
 import java.awt.event.ActionListener;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -10,10 +14,11 @@ public class Interface extends JFrame implements ActionListener {
 	// Atributos
     //RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "pedido" PARA ARMAZENAR fila DE PEDIDOS
     private static int constanteDeTempo = 1;
+	//private static double time; // Cria a variável "time" para armazenar o tempo sleep.
     private static Pedido pedido = new Pedido();
 
     // Icone das imagens no jogo
-    JFrame janela = new JFrame("Add request"); // Cria a janela com o titulo "Add request".
+    private JFrame janela = new JFrame("Add request"); // Cria a janela com o titulo "Add request".
 	// Imagens das Etapas:
 	private ImageIcon imGP1 = new ImageIcon(getClass().getResource("gotapreta.png"));
 	private ImageIcon imGA1 = new ImageIcon(getClass().getResource("gotaAzul.png"));
@@ -22,6 +27,7 @@ public class Interface extends JFrame implements ActionListener {
 	private ImageIcon imF1 = new ImageIcon(getClass().getResource("forno.png"));
 	private ImageIcon imF2 = new ImageIcon(getClass().getResource("forno.png"));
 
+	//Labels das imagens:
 	private JLabel GP1 = new JLabel(imGP1);
 	private JLabel GP2 = new JLabel(imGP1);
 	private JLabel GP3 = new JLabel(imGP1);
@@ -37,7 +43,7 @@ public class Interface extends JFrame implements ActionListener {
 	private JLabel F1 = new JLabel(imF1);
 	private JLabel F2 = new JLabel(imF2);
 
-	// Imagens dos botões:
+	// Textos antes dos ingredientes:
 	private JLabel tipo = new JLabel("Tipo:");
     private JLabel one = new JLabel("Ingredient 1"); // Cria o label "Ingredient 1".
 	private JLabel two = new JLabel("Ingredient 2"); // Cria o label "Ingredient 2".
@@ -55,12 +61,19 @@ public class Interface extends JFrame implements ActionListener {
 	// Cria os botões.
 	private JButton botao1 = new JButton(" Add request "); // Cria o botão com o texto " Adicionar pedido ".
 	private JButton botao2 = new JButton("  Start process  "); // Cria o botão com o texto " iniciar processo ".
+	// Cria os labels das filas:
 	private JLabel texTamanhoFila = new JLabel(" Queue size: ");
 	private JLabel tamFila = new JLabel(" 0 "); // Cria o label "null".
-	private Canvas canvas = new Canvas();
-    
 	// Cria o painel.
-    public void desenharGraficos() {
+	private Canvas canvas = new Canvas();
+
+	// Cria os semáforos.
+	private Semaphore semaforo1 = new Semaphore(3); // Cria o semáforo "iniciar" com 3 permissões.
+	private Semaphore semaforo2 = new Semaphore(2); // Cria o semáforo "assar" com 2 permissões.
+	private ExecutorService executor = Executors.newFixedThreadPool(3); // Cria o executor.
+    
+	// Desenha o painel.
+    private void desenharGraficos() {
 		// Configurações da janela:
 		janela.setBounds(0, 0, 1117, 719);
 		
@@ -100,7 +113,7 @@ public class Interface extends JFrame implements ActionListener {
 		//janela.pack(); // Ajusta o tamanho da janela para o tamanho do conteúdo.
 		janela.setVisible(true);
 
-		// Posiçoes das gotas para os eventos.
+		// Posiçoes das gotas que indica a ocorrencia dos eventos.
 		GP1.setBounds(162, 191, 34, 33);
 		GP2.setBounds(162, 415, 34, 33);
 		GP3.setBounds(162, 619, 34, 33);
@@ -118,7 +131,7 @@ public class Interface extends JFrame implements ActionListener {
     }
 
 	//
-    public void botao(){
+    private void botao(){
         //Quando clicamos no botão é executado o método addBiscoito da classe Pedido.
         botao1.addActionListener(this);
 
@@ -131,7 +144,7 @@ public class Interface extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//Trata os eventos para o botao "botao1"
+		//Trata os eventos para o botao "botao1" (Adicionar pedido).
 		if(e.getSource() == botao1){
 			String s;
 			s = String.valueOf(listaTiposBiscoitos.getSelectedItem());
@@ -147,21 +160,96 @@ public class Interface extends JFrame implements ActionListener {
 				pedido.addBiscoito(new Recheado(ing1, ing2, ing3, constanteDeTempo));
 				System.out.println("Pedido de biscoito recheado adicionado.");
 			}
-			else{
+			else{ // Nunca vai entrar aqui
 				System.out.println("Nenhuma opção selecionada");
 			}
 		
 			String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
 			tamFila.setText(tamanhoDaFila);
 		}
-		// Trata os eventos para o botao "botao2"
+		// Trata os eventos para o botao "botao2" (Iniciar processo).
         if (e.getSource() == botao2){
-			pedido.getBiscoito();
 			botao2.setText(" Process started ");
-			String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
-			tamFila.setText(tamanhoDaFila);
+			botao2.setBackground(Color.GREEN);
+			
 
-			canvas.add(GP1);
+			Runnable t1 = () -> {
+				acquire1();
+				double tempo1, tempo2, tempo3;
+				String name = Thread.currentThread().getName();
+				Biscoito b = pedido.getBiscoito();
+				tempo1 = b.timeIngrediente1();
+				tempo2 = b.timeIngrediente2();
+				tempo3 = b.timeIngrediente3();
+				System.out.println(name);
+				if(name.equals("pool-1-thread-1")){
+					canvas.add(GP1);
+					janela.repaint();
+					sleep(tempo1);
+					canvas.remove(GP1);
+					janela.repaint();
+					sleep(tempo2);
+					canvas.add(GA1);
+					janela.repaint();
+					sleep(tempo3);
+					canvas.remove(GA1);
+					janela.repaint();
+					canvas.add(GV1);
+					janela.repaint();
+					sleep(1000);
+					canvas.remove(GV1);
+					janela.repaint();
+				}
+				else if(name.equals("pool-1-thread-2")){
+					canvas.add(GP2);
+					janela.repaint();
+					sleep(tempo1);
+					canvas.remove(GP2);
+					janela.repaint();
+					sleep(tempo2);
+					canvas.add(GA2);
+					janela.repaint();
+					sleep(tempo3);
+					canvas.remove(GA2);
+					janela.repaint();
+					canvas.add(GV2);
+					janela.repaint();
+					sleep(1000);
+					canvas.remove(GV2);
+					janela.repaint();
+				}
+				else if(name.equals("pool-1-thread-3")){
+					canvas.add(GP3);
+					janela.repaint();
+					sleep(tempo1);
+					canvas.remove(GP3);
+					janela.repaint();
+					sleep(tempo2);
+					canvas.add(GA3);
+					janela.repaint();
+					sleep(tempo3);
+					canvas.remove(GA3);
+					janela.repaint();
+					canvas.add(GV3);
+					janela.repaint();
+					sleep(1000);
+					canvas.remove(GV3);
+					janela.repaint();
+				}
+				
+				semaforo1.release();
+
+			};
+
+			while(pedido.getTamanhoDaFila() > 0){
+				executor.execute(t1);
+				String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
+				tamFila.setText(tamanhoDaFila);
+			}
+			executor.shutdown();
+
+			/*
+			
 			canvas.add(GP2);
 			canvas.add(GP3);
 			canvas.add(GA1);
@@ -173,14 +261,55 @@ public class Interface extends JFrame implements ActionListener {
 			canvas.add(F1);
 			canvas.add(F2);
 			janela.repaint();
+			*/
 		}
 	}
 
-    public void run(){
-        desenharGraficos();
-        botao();
+	/**
+	 * Método que simula o tempo de espera.
+	 * @param time do tipo double.
+	 */
+	private void sleep(double time) {
+		try {
+			Thread.sleep((long) (time * 1000));
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Método que tenta passa pelo semaforo 1 e caso não consiga, ele espera.
+	 */
+	private void acquire1() {
+		try {
+		  semaforo1.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
+
+	 /**
+	 * Método que tenta passa pelo semaforo 2 e caso não consiga, ele espera.
+	 */
+	  private void acquire2() {
+		try {
+		  semaforo2.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
+
+	/**
+	 * Método principal.
+	 */
+	public void run(){
+		desenharGraficos();
+		botao();
 		
 		//canvas.remove(GV2);
 
-    }
+	}
 }

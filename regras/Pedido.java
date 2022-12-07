@@ -1,12 +1,11 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class Pedido implements ActionListener {
+public class Pedido {
     // Atributos
-    private static int tamanhoDaFila = 0;
-    private Queue <Biscoito> biscoitos = new LinkedList<Biscoito>();
+    private static int tamanhoDaFila = 0; // Tamanho da fila de pedidos
+    //RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "pedido" PARA ARMAZENAR fila DE PEDIDOS
+    // LinkedBlockingQueue é uma fila encadeada que permite que várias threads acessem de forma segura.
+    private LinkedBlockingQueue <Biscoito> biscoitos = new LinkedBlockingQueue<Biscoito>();
 
     public Pedido(){
         //
@@ -44,13 +43,5 @@ public class Pedido implements ActionListener {
      */
     public int getTamanhoDaFila(){
         return tamanhoDaFila;
-    }
-
-        /**
-	 * Método que é executado quando o botão é clicado.
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-        //
     }
 }
