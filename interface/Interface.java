@@ -174,14 +174,15 @@ public class Interface extends JFrame implements ActionListener {
 			
 
 			Runnable t1 = () -> {
-				acquire1();
+				
 				double tempo1, tempo2, tempo3;
 				String name = Thread.currentThread().getName();
 				Biscoito b = pedido.getBiscoito();
 				tempo1 = b.timeIngrediente1();
 				tempo2 = b.timeIngrediente2();
 				tempo3 = b.timeIngrediente3();
-				System.out.println(name);
+				System.out.println(name +" "+ tempo1 + " "+ tempo2 +" "+ tempo3);
+				acquire1();
 				if(name.equals("pool-1-thread-1")){
 					canvas.add(GP1);
 					janela.repaint();
@@ -196,7 +197,7 @@ public class Interface extends JFrame implements ActionListener {
 					janela.repaint();
 					canvas.add(GV1);
 					janela.repaint();
-					sleep(1000);
+					sleep(100);
 					canvas.remove(GV1);
 					janela.repaint();
 				}
@@ -214,7 +215,7 @@ public class Interface extends JFrame implements ActionListener {
 					janela.repaint();
 					canvas.add(GV2);
 					janela.repaint();
-					sleep(1000);
+					sleep(100);
 					canvas.remove(GV2);
 					janela.repaint();
 				}
