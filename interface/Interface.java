@@ -54,6 +54,18 @@ public class Interface extends JFrame implements ActionListener {
 	private JTextField segundo = new JTextField(10);
 	private JTextField terceiro = new JTextField(10);
 
+	private JTextField a1 = new JTextField(6);
+	private JTextField a2 = new JTextField(6);
+	private JTextField a3 = new JTextField(6);
+	private JTextField b1 = new JTextField(6);
+	private JTextField b2 = new JTextField(6);
+	private JTextField b3 = new JTextField(6);
+	private JTextField c1 = new JTextField(6);
+	private JTextField c2 = new JTextField(6);
+	private JTextField c3 = new JTextField(6);
+	private JTextField d1 = new JTextField(6);
+	private JTextField d2 = new JTextField(6);
+
 	//Cria os tipos dos biscoitos
 	private String[] tipos = { "Comum", "Recheado"};
 	private JComboBox<String> listaTiposBiscoitos = new JComboBox<>(tipos); // Cria a lista de tipos de biscoitos.
@@ -63,7 +75,7 @@ public class Interface extends JFrame implements ActionListener {
 	private JButton botao2 = new JButton("  Start process  "); // Cria o botão com o texto " iniciar processo ".
 	// Cria os labels das filas:
 	private JLabel texTamanhoFila = new JLabel(" Queue size: ");
-	private JLabel tamFila = new JLabel(" 0 "); // Cria o label "null".
+	private JLabel tamFila1 = new JLabel(" 0 "); // Cria o label "null".
 	// Cria o painel.
 	private Canvas canvas = new Canvas();
 
@@ -88,8 +100,19 @@ public class Interface extends JFrame implements ActionListener {
 		terceiro.setBounds(590, 10, 100, 20);
 		botao1.setBounds(720, 10, 110, 20);
 		texTamanhoFila.setBounds(840, 10, 110, 20);
-		tamFila.setBounds(950, 10, 110, 20);
+		tamFila1.setBounds(950, 10, 110, 20);
 		botao2.setBounds(450, 60, 160, 20);
+		a1.setBounds(145, 278, 70, 20);
+		a2.setBounds(260, 278, 70, 20);
+		a3.setBounds(395, 278, 70, 20);
+		b1.setBounds(145, 500, 70, 20);
+		b2.setBounds(260, 500, 70, 20);
+		b3.setBounds(395, 500, 70, 20);
+		c1.setBounds(145, 695, 70, 20);
+		c2.setBounds(260, 695, 70, 20);
+		c3.setBounds(395, 695, 70, 20);
+		d1.setBounds(560, 364, 70, 20);
+		d2.setBounds(560, 573, 70, 20);
 
 		// Adiciona os componentes no painel:
 		canvas.add(tipo);
@@ -104,12 +127,23 @@ public class Interface extends JFrame implements ActionListener {
 		canvas.add(terceiro);
 		canvas.add(botao1);
 		canvas.add(texTamanhoFila);
-		canvas.add(tamFila);
+		canvas.add(tamFila1);
 		canvas.add(botao2);
+		canvas.add(a1);
+		canvas.add(a2);
+		canvas.add(a3);
+		canvas.add(b1);
+		canvas.add(b2);
+		canvas.add(b3);
+		canvas.add(c1);
+		canvas.add(c2);
+		canvas.add(c3);
+		canvas.add(d1);
+		canvas.add(d2);
 		// Adiciona o painel na janela:
 		janela.add(canvas);
 		janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//janela.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		janela.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		//janela.pack(); // Ajusta o tamanho da janela para o tamanho do conteúdo.
 		janela.setVisible(true);
 
@@ -165,7 +199,7 @@ public class Interface extends JFrame implements ActionListener {
 			}
 		
 			String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
-			tamFila.setText(tamanhoDaFila);
+			tamFila1.setText(tamanhoDaFila);
 		}
 		// Trata os eventos para o botao "botao2" (Iniciar processo).
         if (e.getSource() == botao2){
@@ -245,24 +279,9 @@ public class Interface extends JFrame implements ActionListener {
 			while(pedido.getTamanhoDaFila() > 0){
 				executor.execute(t1);
 				String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
-				tamFila.setText(tamanhoDaFila);
+				tamFila1.setText(tamanhoDaFila);
 			}
 			executor.shutdown();
-
-			/*
-			
-			canvas.add(GP2);
-			canvas.add(GP3);
-			canvas.add(GA1);
-			canvas.add(GA2);
-			canvas.add(GA3);
-			canvas.add(GV1);
-			canvas.add(GV2);
-			canvas.add(GV3);
-			canvas.add(F1);
-			canvas.add(F2);
-			janela.repaint();
-			*/
 		}
 	}
 
