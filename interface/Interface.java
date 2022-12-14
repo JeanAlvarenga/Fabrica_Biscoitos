@@ -1,6 +1,4 @@
 import java.awt.event.ActionListener;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -9,13 +7,23 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-public class Interface extends JFrame implements ActionListener {
+public class Interface extends JFrame implements ActionListener, Runnable{
 	// Atributos
     //RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "pedido" PARA ARMAZENAR fila DE PEDIDOS
-    private static int constanteDeTempo = 1;
+    private static int constanteDeTempo = 2;
+	private boolean fimProcesso = false;
+	private boolean parar = false;
+	private boolean apertado = false;
 	//private static double time; // Cria a variável "time" para armazenar o tempo sleep.
     private static Pedido pedido = new Pedido();
+	//
+	private static Biscoito addI1, addI2, addI3;
+	private static Biscoito addI1L2, addI2L2, addI3L2;
+	private static Biscoito addI1L3, addI2L3, addI3L3;
+	private static Biscoito forno1;
+	private static Biscoito forno2;
 
     // Icone das imagens no jogo
     private JFrame janela = new JFrame("Add request"); // Cria a janela com o titulo "Add request".
@@ -63,8 +71,8 @@ public class Interface extends JFrame implements ActionListener {
 	private JTextField c1 = new JTextField(6);
 	private JTextField c2 = new JTextField(6);
 	private JTextField c3 = new JTextField(6);
-	private JTextField d1 = new JTextField(6);
-	private JTextField d2 = new JTextField(6);
+	private JTextField d1 = new JTextField(6); // Cria o campo de texto "Forno 1".
+	private JTextField d2 = new JTextField(6); // Cria o campo de texto "Forno 2".
 
 	//Cria os tipos dos biscoitos
 	private String[] tipos = { "Comum", "Recheado"};
@@ -74,16 +82,30 @@ public class Interface extends JFrame implements ActionListener {
 	private JButton botao1 = new JButton(" Add request "); // Cria o botão com o texto " Adicionar pedido ".
 	private JButton botao2 = new JButton("  Start process  "); // Cria o botão com o texto " iniciar processo ".
 	// Cria os labels das filas:
-	private JLabel texTamanhoFila = new JLabel(" Queue size: ");
+	private JLabel texttotal = new JLabel(" Total orders: ");
+	private JLabel texTamanhoFila1 = new JLabel(" Queue size 1: ");
+	private JLabel texTamanhoFila2 = new JLabel(" Queue size 2: ");
+	private JLabel texTamanhoFila3 = new JLabel(" Queue size 3: ");
+	// Cria os labels que mostram o tamanho das filas:
+	private JLabel tamTotal = new JLabel(" 0 "); // Cria o label "null".
 	private JLabel tamFila1 = new JLabel(" 0 "); // Cria o label "null".
+	private JLabel tamFila2 = new JLabel(" 0 "); // Cria o label "null".
+	private JLabel tamFila3 = new JLabel(" 0 "); // Cria o label "null".
 	// Cria o painel.
 	private Canvas canvas = new Canvas();
 
 	// Cria os semáforos.
-	private Semaphore semaforo1 = new Semaphore(3); // Cria o semáforo "iniciar" com 3 permissões.
-	private Semaphore semaforo2 = new Semaphore(2); // Cria o semáforo "assar" com 2 permissões.
-	private ExecutorService executor = Executors.newFixedThreadPool(3); // Cria o executor.
-    
+	private Semaphore semaforo1 = new Semaphore(1); // Cria o semáforo "add ingrediente 1" com 1 permissões.
+	private Semaphore semaforo2 = new Semaphore(1); // Cria o semáforo "add ingrediente 2" com 1 permissões.
+	private Semaphore semaforo3 = new Semaphore(1); // Cria o semáforo "add ingrediente 3" com 1 permissões.
+	private Semaphore semaforo21 = new Semaphore(1); // Cria o semáforo "add ingrediente 1 linha 2" com 1 permissões.
+	private Semaphore semaforo22 = new Semaphore(1); // Cria o semáforo "add ingrediente 2 linha 2" com 1 permissões.
+	private Semaphore semaforo23 = new Semaphore(1); // Cria o semáforo "add ingrediente 3 linha 2" com 1 permissões.
+	private Semaphore semaforo31 = new Semaphore(1); // Cria o semáforo "add ingrediente 1 linha 3" com 1 permissões.
+	private Semaphore semaforo32 = new Semaphore(1); // Cria o semáforo "add ingrediente 2 linha 3" com 1 permissões.
+	private Semaphore semaforo33 = new Semaphore(1); // Cria o semáforo "add ingrediente 3 linha 3" com 1 permissões.
+	private Semaphore semaforoForno1 = new Semaphore(1); // Cria o semáforo "add forno1" com 1 permissões.
+    private Semaphore semaforoForno2 = new Semaphore(1); // Cria o semáforo "add forno2" com 1 permissões.
 	// Desenha o painel.
     private void desenharGraficos() {
 		// Configurações da janela:
@@ -99,8 +121,14 @@ public class Interface extends JFrame implements ActionListener {
 		three.setBounds(520, 10, 70, 20);
 		terceiro.setBounds(590, 10, 100, 20);
 		botao1.setBounds(720, 10, 110, 20);
-		texTamanhoFila.setBounds(840, 10, 110, 20);
+		texttotal.setBounds(840, 70, 110, 20);
+		texTamanhoFila1.setBounds(840, 10, 110, 20);
+		texTamanhoFila2.setBounds(840, 30, 110, 20);
+		texTamanhoFila3.setBounds(840, 50, 110, 20);
+		tamTotal.setBounds(950, 70, 110, 20);
 		tamFila1.setBounds(950, 10, 110, 20);
+		tamFila2.setBounds(950, 30, 110, 20);
+		tamFila3.setBounds(950, 50, 110, 20);
 		botao2.setBounds(450, 60, 160, 20);
 		a1.setBounds(145, 278, 70, 20);
 		a2.setBounds(260, 278, 70, 20);
@@ -126,8 +154,14 @@ public class Interface extends JFrame implements ActionListener {
 		canvas.add(three);
 		canvas.add(terceiro);
 		canvas.add(botao1);
-		canvas.add(texTamanhoFila);
+		canvas.add(texttotal);
+		canvas.add(texTamanhoFila1);
+		canvas.add(texTamanhoFila2);
+		canvas.add(texTamanhoFila3);
+		canvas.add(tamTotal);
 		canvas.add(tamFila1);
+		canvas.add(tamFila2);
+		canvas.add(tamFila3);
 		canvas.add(botao2);
 		canvas.add(a1);
 		canvas.add(a2);
@@ -182,114 +216,451 @@ public class Interface extends JFrame implements ActionListener {
 		if(e.getSource() == botao1){
 			String s;
 			s = String.valueOf(listaTiposBiscoitos.getSelectedItem());
-			//RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "comum" PARA ARMAZENAR fila DE PEDIDOS
-			double ing1 = Double.parseDouble(primeiro.getText());
-			double ing2 = Double.parseDouble(segundo.getText());
-			double ing3 = Double.parseDouble(terceiro.getText());
-			if(s.equals("Comum")){
-				pedido.addBiscoito(new Comum(ing1, ing2, ing3, constanteDeTempo));
-				System.out.println("Pedido de biscoito comum adicionado.");
+			//Verifica se os campos estão preenchidos.
+			if(primeiro.getText().isEmpty() || segundo.getText().isEmpty() || terceiro.getText().isEmpty()){
+				JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+				return;
 			}
-			else if(s.equals("Recheado")){
-				pedido.addBiscoito(new Recheado(ing1, ing2, ing3, constanteDeTempo));
-				System.out.println("Pedido de biscoito recheado adicionado.");
+			else{
+				try{
+					double ing1 = Double.parseDouble(primeiro.getText());
+					double ing2 = Double.parseDouble(segundo.getText());
+					double ing3 = Double.parseDouble(terceiro.getText());
+					//Verifica se os valores são válidos.
+					if(ing1 > 0 && ing2 > 0 && ing3 > 0){
+						if(s.equals("Comum")){
+							pedido.addBiscoito(new Comum(ing1, ing2, ing3, constanteDeTempo));
+							System.out.println("Pedido de biscoito comum adicionado.");
+						}
+						else if(s.equals("Recheado")){
+							pedido.addBiscoito(new Recheado(ing1, ing2, ing3, constanteDeTempo));
+							System.out.println("Pedido de biscoito recheado adicionado.");
+						}
+						else{ // Nunca vai entrar aqui
+							System.out.println("Nenhuma opção selecionada");
+						}
+
+					// Atualiza os valores das filas.
+					String tamanhoTotal = String.valueOf(pedido.getTamanhoDasFilas());
+					String tamanhoDaFila1 = String.valueOf(pedido.getTamanhoDaFila1());
+					String tamanhoDaFila2 = String.valueOf(pedido.getTamanhoDaFila2());
+					String tamanhoDaFila3 = String.valueOf(pedido.getTamanhoDaFila3());
+					tamTotal.setText(tamanhoTotal);
+					tamFila1.setText(tamanhoDaFila1);
+					tamFila2.setText(tamanhoDaFila2);
+					tamFila3.setText(tamanhoDaFila3);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Os ingredientes devem ser maiores que zero.");
+					}
+				}
+				catch(NumberFormatException ex){
+					System.out.println("Erro: Algum campo não é um número.");
+					return;
+				}
 			}
-			else{ // Nunca vai entrar aqui
-				System.out.println("Nenhuma opção selecionada");
-			}
-		
-			String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
-			tamFila1.setText(tamanhoDaFila);
 		}
 		// Trata os eventos para o botao "botao2" (Iniciar processo).
-        if (e.getSource() == botao2){
+        if (e.getSource() == botao2 && apertado == false){
 			botao2.setText(" Process started ");
 			botao2.setBackground(Color.GREEN);
-			
+			run(); // Inicia o processo.
+			apertado = true;
+			String tamanhoDaFilas = String.valueOf(pedido.getTamanhoDasFilas());
+			tamTotal.setText(tamanhoDaFilas);
+		}
+	}
 
-			Runnable t1 = () -> {
-				
-				double tempo1, tempo2, tempo3;
-				String name = Thread.currentThread().getName();
-				Biscoito b = pedido.getBiscoito();
-				tempo1 = b.timeIngrediente1();
-				tempo2 = b.timeIngrediente2();
-				tempo3 = b.timeIngrediente3();
-				System.out.println(name +" "+ tempo1 + " "+ tempo2 +" "+ tempo3);
-				acquire1();
-				if(name.equals("pool-1-thread-1")){
+	
+
+	@Override
+	public void run() {
+		addIgrediente1Linha1();
+		addIgrediente2Linha1();
+		addIgrediente3Linha1();
+		addIgrediente1Linha2();
+		addIgrediente2Linha2();
+		addIgrediente3Linha2();
+		addIgrediente1Linha3();
+		addIgrediente2Linha3();
+		addIgrediente3Linha3();
+		assar();		
+	}
+
+	/**
+	 * Método principal.
+	 */
+	public void executar(){
+		desenharGraficos();
+		botao();
+		
+		//canvas.remove(GV2);
+
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 1 na linha 1.
+	 */
+	public void addIgrediente1Linha1(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					addI1 = pedido.getBiscoitoFila1();
+					String tamanhoDaFila1 = String.valueOf(pedido.getTamanhoDaFila1());
+					tamFila1.setText(tamanhoDaFila1);
+					
+					while(addI1 == null){
+						sleep(0.001);
+					}
+					acquire11();
+					System.out.println(addI1.getId() + " ,fabricado linha A: " + addI1); // Imprime o toString do objeto.
+					a1.setText(addI1.getId());
 					canvas.add(GP1);
 					janela.repaint();
-					sleep(tempo1);
+					sleep(addI1.timeIngrediente1());
+					acquire12();
+					addI2 = addI1;
+					a1.setText("");
 					canvas.remove(GP1);
 					janela.repaint();
-					sleep(tempo2);
+					addI1 = null;
+					semaforo1.release();
+					sleep(0.001);
+				}
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 2 na linha 1.
+	 */
+	public void addIgrediente2Linha1(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					while(addI2 == null){
+						if(addI1 == null && parar){
+							return;
+						}
+						sleep(0.001);
+					}
+					a2.setText(addI2.getId());
 					canvas.add(GA1);
 					janela.repaint();
-					sleep(tempo3);
+					sleep(addI2.timeIngrediente2());
+					acquire13();
+					addI3 = addI2;
+					a2.setText("");
 					canvas.remove(GA1);
 					janela.repaint();
+					addI2 = null;
+					semaforo2.release();
+					sleep(0.001);
+				}
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 3 na linha 1.
+	 */
+	public void addIgrediente3Linha1(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					while(addI3 == null){
+						if(addI1 == null && addI1 == null && parar){
+							fimProcesso = true;
+							return;
+						}
+						sleep(0.001);
+					}
+					a3.setText(addI3.getId());
 					canvas.add(GV1);
 					janela.repaint();
-					sleep(100);
+					sleep(addI3.timeIngrediente3());
+					a3.setText("");
 					canvas.remove(GV1);
 					janela.repaint();
+					sleep(0.001);
+					while(!semaforoForno1.tryAcquire()){
+						sleep(0.001);
+					}
+					forno1 = addI3;
+					addI3 = null;
+					semaforo3.release();
+					
 				}
-				else if(name.equals("pool-1-thread-2")){
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 1 na linha 2.
+	 */
+	public void addIgrediente1Linha2(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					addI1L2 = pedido.getBiscoitoFila2();
+					String tamanhoDaFila2 = String.valueOf(pedido.getTamanhoDaFila2());
+					tamFila2.setText(tamanhoDaFila2);
+					
+					while(addI1L2 == null){
+						sleep(0.001);
+					}
+					acquire21();
+					b1.setText(addI1L2.getId());
 					canvas.add(GP2);
 					janela.repaint();
-					sleep(tempo1);
+					sleep(addI1L2.timeIngrediente1());
+					acquire22();
+					addI2L2 = addI1L2;
+					b1.setText("");
 					canvas.remove(GP2);
 					janela.repaint();
-					sleep(tempo2);
+					addI1L2 = null;
+					semaforo21.release();
+					sleep(0.001);
+				}
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 2 na linha 2.
+	 */
+	public void addIgrediente2Linha2(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					while(addI2L2 == null){
+						if(addI1L2 == null && parar){
+							return;
+						}
+						sleep(0.001);
+					}
+					b2.setText(addI2L2.getId());
 					canvas.add(GA2);
 					janela.repaint();
-					sleep(tempo3);
+					sleep(addI2L2.timeIngrediente2());
+					acquire23();
+					addI3L2 = addI2L2;
+					b2.setText("");
 					canvas.remove(GA2);
 					janela.repaint();
+					addI2L2 = null;
+					semaforo22.release();
+					sleep(0.001);
+				}
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 3 na linha 2.
+	 */
+	public void addIgrediente3Linha2(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					while(addI3L2 == null){
+						if(addI1L2 == null && addI2L2 == null && parar){
+							return;
+						}
+						sleep(0.001);
+					}
+					b3.setText(addI3L2.getId());
 					canvas.add(GV2);
 					janela.repaint();
-					sleep(100);
+					sleep(addI3L2.timeIngrediente3());
+					b3.setText("");
 					canvas.remove(GV2);
 					janela.repaint();
+					sleep(0.001);
+					boolean ocupado = false;
+					while(!ocupado){
+						if(!semaforoForno1.tryAcquire()){
+							forno1 = addI3L2;
+							addI3L2 = null;
+							semaforo23.release();
+							ocupado = true;
+						}
+						else if(!semaforoForno2.tryAcquire()){
+							forno2 = addI3L2;
+							addI3L2 = null;
+							semaforo23.release();
+							ocupado = true;
+						}
+						else{
+							sleep(0.001);
+						}
+					}
 				}
-				else if(name.equals("pool-1-thread-3")){
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 1 na linha 3.
+	 */
+	public void addIgrediente1Linha3(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					addI1L3 = pedido.getBiscoitoFila3();
+					String tamanhoDaFila3 = String.valueOf(pedido.getTamanhoDaFila3());
+					tamFila3.setText(tamanhoDaFila3);
+					
+					while(addI1L3 == null){
+						sleep(0.001);
+					}
+					acquire31();
+					c1.setText(addI1L3.getId());
 					canvas.add(GP3);
 					janela.repaint();
-					sleep(tempo1);
+					sleep(addI1L3.timeIngrediente1());
+					acquire32();
+					addI2L3 = addI1L3;
+					c1.setText("");
 					canvas.remove(GP3);
 					janela.repaint();
-					sleep(tempo2);
+					addI1L3 = null;
+					semaforo31.release();
+					sleep(0.001);
+				}
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 2 na linha 3.
+	 */
+	public void addIgrediente2Linha3(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					while(addI2L3 == null){
+						if(addI1L3 == null && parar){
+							return;
+						}
+						sleep(0.001);
+					}
+					c2.setText(addI2L3.getId());
 					canvas.add(GA3);
 					janela.repaint();
-					sleep(tempo3);
+					sleep(addI2L3.timeIngrediente2());
+					acquire33();
+					addI3L3 = addI2L3;
+					c2.setText("");
 					canvas.remove(GA3);
 					janela.repaint();
+					addI2L3 = null;
+					semaforo32.release();
+					sleep(0.001);
+				}
+			}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona o ingrediente 3 na linha 3.
+	 */
+	public void addIgrediente3Linha3(){
+		new Thread(new Runnable() {
+			@Override
+			public void run(){
+				while(!fimProcesso){
+					while(addI3L3 == null){
+						if(addI1L3 == null && addI2L3 == null && parar){
+							return;
+						}
+						sleep(0.001);
+					}
+					c3.setText(addI3L3.getId());
 					canvas.add(GV3);
 					janela.repaint();
-					sleep(1000);
+					sleep(addI3L3.timeIngrediente3());
+					c3.setText("");
 					canvas.remove(GV3);
 					janela.repaint();
+					sleep(0.001);
+					while(!semaforoForno2.tryAcquire()){
+						sleep(0.001);
+					}
+					forno2 = addI3L3;
+					addI3L3 = null;
+					semaforo33.release();
 				}
-				
-				semaforo1.release();
-
-			};
-
-			while(pedido.getTamanhoDaFila() > 0){
-				executor.execute(t1);
-				String tamanhoDaFila = String.valueOf(pedido.getTamanhoDaFila());
-				tamFila1.setText(tamanhoDaFila);
 			}
-			executor.shutdown();
-		}
+			
+		}).start();
+	}
+
+	/**
+	 * Método que adiciona biscoito no forno.
+	 */
+	public void assar(){
+			new Thread(new Runnable() {
+				@Override
+				public void run(){
+					while(true){
+						while(forno1 == null){
+							sleep(0.001);
+						}
+						d1.setText(forno1.getId());
+						canvas.add(F1);
+						janela.repaint();
+						sleep(forno1.calcularTempo());
+						d1.setText("");
+						canvas.remove(F1);
+						janela.repaint();
+						forno1 = null;
+						semaforoForno1.release();
+					}
+				}
+			}).start();
+			new Thread(new Runnable() {
+				public void run(){
+					while(true){
+						while(forno2 == null){
+							sleep(1);
+						}
+						d2.setText(forno2.getId());
+						canvas.add(F2);
+						janela.repaint();
+						sleep(forno2.calcularTempo());
+						d2.setText("");
+						canvas.remove(F2);
+						janela.repaint();
+						forno2 = null;
+						semaforoForno2.release();
+					}
+				}
+			}).start();
 	}
 
 	/**
 	 * Método que simula o tempo de espera.
 	 * @param time do tipo double.
 	 */
-	private void sleep(double time) {
+	public void sleep(double time) {
 		try {
 			Thread.sleep((long) (time * 1000));
 		} catch (InterruptedException e) {
@@ -301,7 +672,7 @@ public class Interface extends JFrame implements ActionListener {
 	/**
 	 * Método que tenta passa pelo semaforo 1 e caso não consiga, ele espera.
 	 */
-	private void acquire1() {
+	private void acquire11() {
 		try {
 		  semaforo1.acquire();
 		} catch (InterruptedException e) {
@@ -313,7 +684,7 @@ public class Interface extends JFrame implements ActionListener {
 	 /**
 	 * Método que tenta passa pelo semaforo 2 e caso não consiga, ele espera.
 	 */
-	  private void acquire2() {
+	  private void acquire12() {
 		try {
 		  semaforo2.acquire();
 		} catch (InterruptedException e) {
@@ -323,13 +694,86 @@ public class Interface extends JFrame implements ActionListener {
 	  }
 
 	/**
-	 * Método principal.
+	 * Método que tenta passa pelo semaforo 3 e caso não consiga, ele espera.
 	 */
-	public void run(){
-		desenharGraficos();
-		botao();
-		
-		//canvas.remove(GV2);
+	  private void acquire13() {
+		try {
+		  semaforo3.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
 
-	}
+	/**
+	 * Método que tenta passa pelo semaforo 4 e caso não consiga, ele espera.
+	 */
+	  private void acquire21() {
+		try {
+		  semaforo21.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
+
+	/**
+	 * Método que tenta passa pelo semaforo 5 e caso não consiga, ele espera.
+	 */
+	  private void acquire22() {
+		try {
+		  semaforo22.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
+
+	/**
+	 * Método que tenta passa pelo semaforo 6 e caso não consiga, ele espera.
+	 */
+	  private void acquire23() {
+		try {
+		  semaforo23.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
+
+	/**
+	 * Método que tenta passa pelo semaforo 7 e caso não consiga, ele espera.
+	 */
+	  private void acquire31() {
+		try {
+		  semaforo31.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
+
+	/**
+	 * Método que tenta passa pelo semaforo 8 e caso não consiga, ele espera.
+	 */
+	  private void acquire32() {
+		try {
+		  semaforo32.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
+
+	/**
+	 * Método que tenta passa pelo semaforo 9 e caso não consiga, ele espera.
+	 */
+	  private void acquire33() {
+		try {
+		  semaforo33.acquire();
+		} catch (InterruptedException e) {
+		  Thread.currentThread().interrupt();
+		  e.printStackTrace();
+		}
+	  }
 }

@@ -1,14 +1,18 @@
 public abstract class Biscoito{
     // Atributos
+    private static int id = 0;
+    private int idBiscoito;
     private final int constanteDeTempo;
     private double ingrediente1, ingrediente2, ingrediente3;
 
     // Construtor
     public Biscoito(double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo){
+        id++;
         this.ingrediente1 = ingrediente1;
         this.ingrediente2 = ingrediente2;
         this.ingrediente3 = ingrediente3;
         this.constanteDeTempo = constanteDeTempo;
+        this.idBiscoito = id;
     }
 
     /**
@@ -62,5 +66,17 @@ public abstract class Biscoito{
      * @return double tempo gasto na produção
      */
     public abstract double calcularTempo();
+
+    /**
+     * Método para retornar o id do pedido.
+     * @return double tempo gasto na produção
+     */
+    public String getId() {
+        return "Pedido: " + idBiscoito;
+    }  
     
+    @Override
+    public String toString() {
+        return "Peso utilizado: ingrediente1: " + ingrediente1 + " Kg, ingrediente2: " + ingrediente2 + " Kg, ingrediente3: " + ingrediente3 + " Kg.";
+    }
 }
