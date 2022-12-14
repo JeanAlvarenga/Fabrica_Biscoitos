@@ -631,8 +631,11 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d1.setText("");
 						canvas.remove(F1);
 						janela.repaint();
-						forno1 = null;
-						semaforoForno1.release();
+						synchronized(this){
+							forno1 = null;
+							semaforoForno1.release();
+						}
+						
 					}
 				}
 			}).start();
@@ -649,8 +652,10 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d2.setText("");
 						canvas.remove(F2);
 						janela.repaint();
-						forno2 = null;
-						semaforoForno2.release();
+						synchronized(this){
+							forno2 = null;
+							semaforoForno2.release();
+						}
 					}
 				}
 			}).start();
