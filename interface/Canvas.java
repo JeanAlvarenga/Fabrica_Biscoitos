@@ -10,7 +10,7 @@ public class Canvas extends JPanel {
     public Canvas(){
         super.setLayout(null);
         try{
-            image = ImageIO.read(new File("D:\\documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundo.png"));
+            image = ImageIO.read(new File("D:\\documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundo1.png"));
         }catch(Exception e){
             System.out.println("Erro ao carregar imagem");
         }
