@@ -12,9 +12,7 @@ import javax.swing.JTextField;
 public class Interface extends JFrame implements ActionListener, Runnable{
 	// Atributos
     //RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "pedido" PARA ARMAZENAR fila DE PEDIDOS
-    private static int constanteDeTempo = 2;
-	private boolean fimProcesso = false;
-	private boolean parar = false;
+    private static int constanteDeTempo = 1; //____________ MODIFICAR __________________
 	private boolean apertado = false;
 	//private static double time; // Cria a variável "time" para armazenar o tempo sleep.
     private static Pedido pedido = new Pedido();
@@ -305,7 +303,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					addI1 = pedido.getBiscoitoFila1();
 					String tamanhoDaFila1 = String.valueOf(pedido.getTamanhoDaFila1());
 					tamFila1.setText(tamanhoDaFila1);
@@ -314,7 +312,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						sleep(0.001);
 					}
 					acquire11();
-					System.out.println(addI1.getId() + " ,fabricado linha A: " + addI1); // Imprime o toString do objeto.
 					a1.setText(addI1.getId());
 					canvas.add(GP1);
 					janela.repaint();
@@ -340,9 +337,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					while(addI2 == null){
-						if(addI1 == null && parar){
+						if(addI1 == null){
 							return;
 						}
 						sleep(0.001);
@@ -372,10 +369,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					while(addI3 == null){
-						if(addI1 == null && addI1 == null && parar){
-							fimProcesso = true;
+						if(addI1 == null && addI2 == null){
 							return;
 						}
 						sleep(0.001);
@@ -408,7 +404,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					addI1L2 = pedido.getBiscoitoFila2();
 					String tamanhoDaFila2 = String.valueOf(pedido.getTamanhoDaFila2());
 					tamFila2.setText(tamanhoDaFila2);
@@ -442,9 +438,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					while(addI2L2 == null){
-						if(addI1L2 == null && parar){
+						if(addI1L2 == null){
 							return;
 						}
 						sleep(0.001);
@@ -474,9 +470,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					while(addI3L2 == null){
-						if(addI1L2 == null && addI2L2 == null && parar){
+						if(addI1L2 == null && addI2L2 == null){
 							return;
 						}
 						sleep(0.001);
@@ -488,21 +484,13 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
 					boolean ocupado = false;
 					while(!ocupado){ //Verifica se o forno está ocupado.
-						if(!semaforoForno1.tryAcquire()){
-							b3.setText("");
-							canvas.remove(GV2);
-							janela.repaint();
-							sleep(0.001);
+						if(semaforoForno1.tryAcquire()){
 							forno1 = addI3L2;
 							addI3L2 = null;
 							semaforo23.release();
 							ocupado = true;
 						}
-						else if(!semaforoForno2.tryAcquire()){
-							b3.setText("");
-							canvas.remove(GV2);
-							janela.repaint();
-							sleep(0.001);
+						else if(semaforoForno2.tryAcquire()){
 							forno2 = addI3L2;
 							addI3L2 = null;
 							semaforo23.release();
@@ -512,6 +500,10 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 							sleep(0.001);
 						}
 					}
+					sleep(0.001);
+					b3.setText("");
+					canvas.remove(GV2);
+					janela.repaint();
 				}
 			}
 			
@@ -525,7 +517,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					addI1L3 = pedido.getBiscoitoFila3();
 					String tamanhoDaFila3 = String.valueOf(pedido.getTamanhoDaFila3());
 					tamFila3.setText(tamanhoDaFila3);
@@ -559,9 +551,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					while(addI2L3 == null){
-						if(addI1L3 == null && parar){
+						if(addI1L3 == null){
 							return;
 						}
 						sleep(0.001);
@@ -591,9 +583,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		new Thread(new Runnable() {
 			@Override
 			public void run(){
-				while(!fimProcesso){
+				while(true){
 					while(addI3L3 == null){
-						if(addI1L3 == null && addI2L3 == null && parar){
+						if(addI1L3 == null && addI2L3 == null){
 							return;
 						}
 						sleep(0.001);
@@ -636,10 +628,10 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d1.setText("");
 						canvas.remove(F1);
 						janela.repaint();
-						synchronized(this){
-							forno1 = null;
-							semaforoForno1.release();
-						}
+						System.out.println(forno1.getId() + " ,fabricado forno 1: " + forno1); // Imprime o toString do objeto.
+						forno1 = null;
+						semaforoForno1.release();
+						
 						
 					}
 				}
@@ -648,7 +640,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 				public void run(){
 					while(true){
 						while(forno2 == null){
-							sleep(1);
+							sleep(0.001);
 						}
 						d2.setText(forno2.getId());
 						canvas.add(F2);
@@ -657,10 +649,10 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d2.setText("");
 						canvas.remove(F2);
 						janela.repaint();
-						synchronized(this){
-							forno2 = null;
-							semaforoForno2.release();
-						}
+						System.out.println(forno2.getId() + " ,fabricado forno 2: " + forno2); // Imprime o toString do objeto.
+						forno2 = null;
+						semaforoForno2.release();
+						
 					}
 				}
 			}).start();
