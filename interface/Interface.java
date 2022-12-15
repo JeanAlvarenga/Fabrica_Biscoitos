@@ -266,8 +266,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			botao2.setBackground(Color.GREEN);
 			run(); // Inicia o processo.
 			apertado = true;
-			String tamanhoDaFilas = String.valueOf(pedido.getTamanhoDasFilas());
-			tamTotal.setText(tamanhoDaFilas);
+			//String tamanhoDaFilas = String.valueOf(pedido.getTamanhoDasFilas());
+			//tamTotal.setText(tamanhoDaFilas);
 		}
 	}
 
@@ -384,13 +384,13 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 					canvas.add(GV1);
 					janela.repaint();
 					sleep(addI3.timeIngrediente3());
+					while(!semaforoForno1.tryAcquire()){
+						sleep(0.001);
+					}
 					a3.setText("");
 					canvas.remove(GV1);
 					janela.repaint();
 					sleep(0.001);
-					while(!semaforoForno1.tryAcquire()){
-						sleep(0.001);
-					}
 					forno1 = addI3;
 					addI3 = null;
 					semaforo3.release();
@@ -484,20 +484,25 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 					b3.setText(addI3L2.getId());
 					canvas.add(GV2);
 					janela.repaint();
-					sleep(addI3L2.timeIngrediente3());
-					b3.setText("");
-					canvas.remove(GV2);
-					janela.repaint();
-					sleep(0.001);
+					sleep(addI3L2.timeIngrediente3()); // Aguarda o tempo de preparo do ingrediente 3.
+
 					boolean ocupado = false;
-					while(!ocupado){
+					while(!ocupado){ //Verifica se o forno está ocupado.
 						if(!semaforoForno1.tryAcquire()){
+							b3.setText("");
+							canvas.remove(GV2);
+							janela.repaint();
+							sleep(0.001);
 							forno1 = addI3L2;
 							addI3L2 = null;
 							semaforo23.release();
 							ocupado = true;
 						}
 						else if(!semaforoForno2.tryAcquire()){
+							b3.setText("");
+							canvas.remove(GV2);
+							janela.repaint();
+							sleep(0.001);
 							forno2 = addI3L2;
 							addI3L2 = null;
 							semaforo23.release();
@@ -597,13 +602,13 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 					canvas.add(GV3);
 					janela.repaint();
 					sleep(addI3L3.timeIngrediente3());
+					while(!semaforoForno2.tryAcquire()){
+						sleep(0.001);
+					}
 					c3.setText("");
 					canvas.remove(GV3);
 					janela.repaint();
 					sleep(0.001);
-					while(!semaforoForno2.tryAcquire()){
-						sleep(0.001);
-					}
 					forno2 = addI3L3;
 					addI3L3 = null;
 					semaforo33.release();
