@@ -23,22 +23,22 @@ public class Recheado extends Biscoito{
         String s;
         int hora, minuto, segundo;
         if(calcularTempo() < 60){
-            s = "biscoito recheado, tempo de produção: " + calcularTempo() + " seg. " + 
-            calcularQuantidadeBiscoitos() + " biscoitos produzidos "+ super.toString();
+            s = "tipo biscoito recheado, tempo de produção: " + (int)calcularTempo() + " seg. " + 
+            calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         else if(calcularTempo() < 3600 && calcularTempo() >= 60){
             minuto = (int) calcularTempo() / 60;
             segundo = (int) calcularTempo() % 60;
-            s = "biscoito recheado, tempo de produção: " + minuto + " min, " + segundo + " seg, " + 
-            calcularQuantidadeBiscoitos() + " biscoitos produzidos "+ super.toString();
+            s = "tipo biscoito recheado, tempo de produção: " + minuto + " min, " + segundo + " seg, " + 
+            calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         else{
             hora = (int) calcularTempo() / 3600;
             minuto = (int) calcularTempo() % 3600 / 60;
             segundo = (int) calcularTempo() % 3600 % 60;
-            s = "biscoito recheado, " + "quantidade: "+ calcularQuantidadeBiscoitos() +
+            s = "tipo biscoito recheado, " + "quantidade: "+ calcularQuantidadeBiscoitos() +
             "tempo de produção: " + hora + " horas, " + minuto + " min. " + segundo +
-        " seg, " + calcularQuantidadeBiscoitos() + " biscoitos produzidos "+ super.toString();
+        " seg, " + calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         return s;
     }

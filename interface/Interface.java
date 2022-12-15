@@ -1,6 +1,7 @@
 import java.awt.event.ActionListener;
 import java.util.concurrent.Semaphore;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -8,7 +9,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 public class Interface extends JFrame implements ActionListener, Runnable{
 	// Atributos
     //RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "pedido" PARA ARMAZENAR fila DE PEDIDOS
@@ -25,6 +28,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
     // Icone das imagens no jogo
     private JFrame janela = new JFrame("Add request"); // Cria a janela com o titulo "Add request".
+	private JFrame relatorio = new JFrame("Report"); // Cria a janela com o titulo "Start process".
 	// Imagens das Etapas:
 	private ImageIcon imGP1 = new ImageIcon(getClass().getResource("gotapreta.png"));
 	private ImageIcon imGA1 = new ImageIcon(getClass().getResource("gotaAzul.png"));
@@ -79,6 +83,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	// Cria os botões.
 	private JButton botao1 = new JButton(" Add request "); // Cria o botão com o texto " Adicionar pedido ".
 	private JButton botao2 = new JButton("  Start process  "); // Cria o botão com o texto " iniciar processo ".
+	private JButton botao3 = new JButton("  Open report "); // Cria o botão com o texto " parar processo ".
 	// Cria os labels das filas:
 	private JLabel texttotal = new JLabel(" Total orders: ");
 	private JLabel texTamanhoFila1 = new JLabel(" Queue size 1: ");
@@ -91,6 +96,10 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	private JLabel tamFila3 = new JLabel(" 0 "); // Cria o label "null".
 	// Cria o painel.
 	private Canvas canvas = new Canvas();
+	private CanvasRelatorio canvasRelatorio = new CanvasRelatorio();
+	// Cria Area de texto.
+	private JTextArea relatorioArea = new JTextArea(100, 100);
+	JScrollPane scrooll = new JScrollPane(relatorioArea);
 
 	// Cria os semáforos.
 	private Semaphore semaforo1 = new Semaphore(1); // Cria o semáforo "add ingrediente 1" com 1 permissões.
@@ -128,6 +137,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		tamFila2.setBounds(88, 434, 110, 20);
 		tamFila3.setBounds(88, 634, 110, 20);
 		botao2.setBounds(450, 60, 160, 20);
+		botao3.setBounds(670, 60, 160, 20);
 		a1.setBounds(145, 278, 70, 20);
 		a2.setBounds(260, 278, 70, 20);
 		a3.setBounds(395, 278, 70, 20);
@@ -161,6 +171,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		canvas.add(tamFila2);
 		canvas.add(tamFila3);
 		canvas.add(botao2);
+		canvas.add(botao3);
 		canvas.add(a1);
 		canvas.add(a2);
 		canvas.add(a3);
@@ -196,6 +207,15 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		F2.setBounds(630, 540, 60, 73);
     }
 
+	//Desenhar janela de relatorio
+	private void desenharGraficoRelatorio(){
+		relatorio.setBounds(0, 0, 1117, 719);
+		scrooll.setBounds(0, 190, 1117, 529);
+		// Tamanho da barra
+        scrooll.setPreferredSize(new Dimension(250, 250));
+		canvasRelatorio.add(scrooll);
+		relatorio.add(canvasRelatorio);
+	}
 	//
     private void botao(){
         //Quando clicamos no botão é executado o método addBiscoito da classe Pedido.
@@ -203,6 +223,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
         //Quando clicamos no botão é executado o método iniciarProcesso da classe Pedido.
         botao2.addActionListener(this);
+
+		//Quando clicamos no botão é executado o método gerar relatorio
+		botao3.addActionListener(this);
     }
 
 	/**
@@ -267,6 +290,10 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			//String tamanhoDaFilas = String.valueOf(pedido.getTamanhoDasFilas());
 			//tamTotal.setText(tamanhoDaFilas);
 		}
+		// Trata os eventos para o botao "botao3" (Gerar relatório).
+		if(e.getSource() == botao3){
+            relatorio.setVisible(true);
+		}
 	}
 
 	
@@ -290,6 +317,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	 */
 	public void executar(){
 		desenharGraficos();
+		desenharGraficoRelatorio();
 		botao();
 		
 		//canvas.remove(GV2);
@@ -628,7 +656,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d1.setText("");
 						canvas.remove(F1);
 						janela.repaint();
-						System.out.println(forno1.getId() + " ,fabricado forno 1: " + forno1); // Imprime o toString do objeto.
+						String s = (forno1.getId() + " , fabricado forno 1, " + forno1); // Imprime o toString do objeto.
+						relatorioArea.append(s + "\n");
 						forno1 = null;
 						semaforoForno1.release();
 						
@@ -649,7 +678,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d2.setText("");
 						canvas.remove(F2);
 						janela.repaint();
-						System.out.println(forno2.getId() + " ,fabricado forno 2: " + forno2); // Imprime o toString do objeto.
+						String a = (forno2.getId() + " , fabricado forno 2, " + forno2); // Imprime o toString do objeto.
+						relatorioArea.append(a + "\n");
 						forno2 = null;
 						semaforoForno2.release();
 						
