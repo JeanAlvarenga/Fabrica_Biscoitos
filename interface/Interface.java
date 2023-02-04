@@ -282,7 +282,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			}
 		}
 		// Trata os eventos para o botao "botao2" (Iniciar processo).
-        if (e.getSource() == botao2 && apertado == false){
+        if (e.getSource() == botao2){
 			botao2.setText(" Process started ");
 			botao2.setBackground(Color.GREEN);
 			run(); // Inicia o processo.
@@ -335,7 +335,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 					addI1 = pedido.getBiscoitoFila1();
 					String tamanhoDaFila1 = String.valueOf(pedido.getTamanhoDaFila1());
 					tamFila1.setText(tamanhoDaFila1);
-					
 					while(addI1 == null){
 						sleep(0.001);
 					}
