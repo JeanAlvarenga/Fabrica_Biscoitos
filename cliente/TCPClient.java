@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class TCPClient {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 9090)) {
+        try (Socket socket = new Socket("192.168.0.116", 9090)) { //localhost
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -17,5 +17,7 @@ public class TCPClient {
             System.err.println("Could not connect to server.");
             e.printStackTrace();
         }
+        
     }
 }
+

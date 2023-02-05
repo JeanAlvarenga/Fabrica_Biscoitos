@@ -8,6 +8,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A simple TCP server that accepts client connections and registers them.
+ * The server will print the name of the registered client to the console.
+ * The server will also send a confirmation message to the client.
+ */
 public class TCPServer {
     private List<String> registeredClients = new ArrayList<>();
 
@@ -16,6 +21,10 @@ public class TCPServer {
         server.startServer();
     }
 
+    /**
+     * Starts the server and listens for client connections.
+     * When a client connects, a new thread is started to handle the client.
+     */
     private void startServer() {
         try (ServerSocket serverSocket = new ServerSocket(9090)) {
             while (true) {
@@ -28,6 +37,11 @@ public class TCPServer {
         }
     }
 
+    /**
+     * A thread that handles a client connection.
+     * The thread reads the client name from the input stream and
+     * sends a confirmation message to the client.
+     */
     private class ClientHandler extends Thread {
         private Socket clientSocket;
 
