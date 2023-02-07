@@ -8,18 +8,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.fasterxml.jackson.databind.JsonNode;
+//import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-/**
- * A simple TCP server that accepts client connections and registers them.
- * The server will print the name of the registered client to the console.
- * The server will also send a confirmation message to the client.
- */
 public class TCPServer {
     private Interface interfaceGrafica;
     private AccessControl controleDeAcesso;
+    private String permissao;
 
     public TCPServer(){
         interfaceGrafica = new Interface();
@@ -79,9 +75,11 @@ public class TCPServer {
 
                     // Adiciona o pedido na fila.
                     if(controleDeAcesso.checkAccess(user, password)){
-                        System.out.println("Acesso permitido.");
+                        System.out.println("Acesso permitido!");
+                        permissao = "                   Acesso permitido!";
                         interfaceGrafica.addPedido(user, password, ing1, ing2, ing3, tipo);
                     }else{
+                        permissao = "           Usuario invalido. Acesso negado!";
                         System.out.println("Acesso negado.");
                     }
                 } catch (ParseException e) {
@@ -90,8 +88,8 @@ public class TCPServer {
 
                 // Envia uma mensagem de confirmação para o cliente.
                 ObjectNode response = mapper.createObjectNode();
-                response.put("status", "success");
-                response.put("message", "Data received and processed successfully");
+                response.put("status", permissao);
+                response.put("message", "Pedido recebido e processado com sucesso. ");
                 writer.println(response.toString());
                 writer.println("Recebido.");
 

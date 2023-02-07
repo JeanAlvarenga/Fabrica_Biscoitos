@@ -26,7 +26,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	private static Biscoito forno1;
 	private static Biscoito forno2;
 
-    // Icone das imagens no jogo
+    // Icone das imagens
     private JFrame janela = new JFrame("Add request"); // Cria a janela com o titulo "Add request".
 	private JFrame relatorio = new JFrame("Report"); // Cria a janela com o titulo "Start process".
 	// Imagens das Etapas:
@@ -64,6 +64,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	private JTextField segundo = new JTextField(10);
 	private JTextField terceiro = new JTextField(10);
 
+	// Cria os campos da produção.
 	private JTextField a1 = new JTextField(6);
 	private JTextField a2 = new JTextField(6);
 	private JTextField a3 = new JTextField(6);
