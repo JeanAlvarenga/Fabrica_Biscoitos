@@ -8,6 +8,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * A simple TCP server that accepts client connections and registers them.
@@ -55,12 +58,13 @@ public class TCPServer {
             double ing3;
 
             try (
-                BufferedReader in = new BufferedReader(
+                BufferedReader reader = new BufferedReader(
                     new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)
+                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)
             ) {
                 // Lê os dados enviados pelo cliente.
-                String json = in.readLine();
+                String json = reader.readLine();
+                ObjectMapper mapper = new ObjectMapper();
                 System.out.println("Pedido recebido: " + json);
                 JSONParser parser = new JSONParser();
                 try {
@@ -83,11 +87,14 @@ public class TCPServer {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                
 
-                //registeredClients.add(clientName);
-                //System.out.println("Client send: " + clientName);
-                //out.println("Registration successful.");
+                // Envia uma mensagem de confirmação para o cliente.
+                ObjectNode response = mapper.createObjectNode();
+                response.put("status", "success");
+                response.put("message", "Data received and processed successfully");
+                writer.println(response.toString());
+                writer.println("Recebido.");
+
             } catch (IOException e) {
                 System.err.println("Error handling client.");
                 e.printStackTrace();
@@ -97,5 +104,7 @@ public class TCPServer {
     }
     public void cadastrarCliente(){
         controleDeAcesso.registerUser("Jean", "12345678");
+        controleDeAcesso.registerUser("Daniel", "12345678");
+        controleDeAcesso.registerUser("Samuel", "12345678");
     }
 }
