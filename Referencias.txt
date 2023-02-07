@@ -20,3 +20,18 @@ Referencias:
 [19] https://desenvolvimentoaberto.org/2014/04/04/visual-jtextarea-jscrollpane-java/
 
 [20] https://www.youtube.com/watch?v=jCxpn5at3tE&ab_channel=%C3%81reaTechBrasil
+[21] https://www.youtube.com/watch?v=LWFSGs4CG6I&ab_channel=ProgrammingExperts bom
+[22] https://stackoverflow.com/questions/48796971/java-how-to-pass-json-object-over-a-socket
+[23] https://www.youtube.com/watch?v=7QNJvxXCYOY&ab_channel=ProgrammingExperts bom
+[24] https://www.youtube.com/watch?v=bjt7NJMr624&ab_channel=sep1213
+[25] https://www.youtube.com/watch?v=6kPOhWqHqZc&ab_channel=ProgrammingExperts
+[26] https://www.youtube.com/watch?v=tFWafDW-T90&list=PLmpc3xvYSk4zQ6ejB_JKe1hSh9FrfYSlk&index=58&ab_channel=CaveofProgramming
+[27] https://www.youtube.com/watch?v=BQ2m2HAPjR0&ab_channel=%C3%81reaTechBrasil
+[28] https://www.youtube.com/watch?v=mKzud0KdRMg&ab_channel=DaviFontenele
+[29] https://www.tabnine.com/code/java/methods/org.json.JSONObject/getDouble
+[30]
+[31]
+[32]
+[33]
+[34]
+[35]

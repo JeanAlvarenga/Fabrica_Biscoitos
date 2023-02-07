@@ -4,8 +4,8 @@ public class Recheado extends Biscoito{
      /**
      * Construtor
      */
-    public Recheado(double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo) {
-        super(ingrediente1, ingrediente2, ingrediente3, constanteDeTempo);
+    public Recheado(String usuario, String password, double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo) {
+        super(usuario, password, ingrediente1, ingrediente2, ingrediente3, constanteDeTempo);
     }
     
     @Override
@@ -23,20 +23,20 @@ public class Recheado extends Biscoito{
         String s;
         int hora, minuto, segundo;
         if(calcularTempo() < 60){
-            s = "tipo biscoito recheado, tempo de produção: " + (int)calcularTempo() + " seg. " + 
+            s = "tipo recheado, tempo de produção: " + (int)calcularTempo() + " seg. " + 
             calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         else if(calcularTempo() < 3600 && calcularTempo() >= 60){
             minuto = (int) calcularTempo() / 60;
             segundo = (int) calcularTempo() % 60;
-            s = "tipo biscoito recheado, tempo de produção: " + minuto + " min, " + segundo + " seg, " + 
+            s = "tipo recheado, tempo de produção: " + minuto + " min, " + segundo + " seg, " + 
             calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         else{
             hora = (int) calcularTempo() / 3600;
             minuto = (int) calcularTempo() % 3600 / 60;
             segundo = (int) calcularTempo() % 3600 % 60;
-            s = "tipo biscoito recheado, " + "quantidade: "+ calcularQuantidadeBiscoitos() +
+            s = "tipo recheado, " + "quantidade: "+ calcularQuantidadeBiscoitos() +
             "tempo de produção: " + hora + " horas, " + minuto + " min. " + segundo +
         " seg, " + calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }

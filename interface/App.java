@@ -6,7 +6,7 @@
 
 public class App {
     public static void main(String[] args){
-        Interface interfaceGrafica = new Interface();
-        interfaceGrafica.executar();
+        TCPServer server = new TCPServer();
+        server.startServer();
     }
 }

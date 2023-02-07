@@ -3,11 +3,14 @@ public abstract class Biscoito{
     private static int id = 0;
     private int idBiscoito;
     private final int constanteDeTempo;
+    private String usuario, password;
     private double ingrediente1, ingrediente2, ingrediente3;
 
     // Construtor
-    public Biscoito(double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo){
+    public Biscoito(String usuario, String password, double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo){
         id++;
+        this.usuario = usuario;
+        this.password = password;
         this.ingrediente1 = ingrediente1;
         this.ingrediente2 = ingrediente2;
         this.ingrediente3 = ingrediente3;
@@ -31,6 +34,22 @@ public abstract class Biscoito{
         return constanteDeTempo;
     }
 
+    /**
+     * Método que retorna o usuário
+     * @return String com o usuário
+     */
+    public String getUsuario() {
+        return usuario;
+    }
+
+    /**
+     * Método que retorna a senha
+     * @return String com a senha
+     */
+    public String getPassword() {
+        return password;
+    }
+    
     /**
      * Método que retorna o tempo para adicionar o ingrediente 1
      * @return double com o tempo.
@@ -77,6 +96,6 @@ public abstract class Biscoito{
     
     @Override
     public String toString() {
-        return "Peso utilizado: ingrediente1: " + ingrediente1 + " Kg, ingrediente2: " + ingrediente2 + " Kg, ingrediente3: " + ingrediente3 + " Kg.";
+        return "Peso utilizado: ingrediente1: " + ingrediente1 + " Kg, ingrediente2: " + ingrediente2 + " Kg, ingrediente3: " + ingrediente3 + " Kg, total: " + calcularQuantidadeIngredientes() + " Kg.";
     }
 }

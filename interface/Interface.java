@@ -12,11 +12,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+
 public class Interface extends JFrame implements ActionListener, Runnable{
 	// Atributos
     //RESERVA DE MEMÓRIA E CRIAÇÃO DA VARIAVEL "pedido" PARA ARMAZENAR fila DE PEDIDOS
     private static int constanteDeTempo = 1; //____________ MODIFICAR __________________
-	private boolean apertado = false;
 	//private static double time; // Cria a variável "time" para armazenar o tempo sleep.
     private static Pedido pedido = new Pedido();
 	//
@@ -230,12 +230,15 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
 	/**
 	 * Método que é executado quando o botão é clicado.
+	 * Botão 1: Adicionar pedido.
+	 * Botão 2: Iniciar processo.
+	 * Botão 3: Gerar relatorio.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//Trata os eventos para o botao "botao1" (Adicionar pedido).
 		if(e.getSource() == botao1){
-			String s;
+			String s; //Variavel que recebe o tipo de biscoito selecionado.
 			s = String.valueOf(listaTiposBiscoitos.getSelectedItem());
 			//Verifica se os campos estão preenchidos.
 			if(primeiro.getText().isEmpty() || segundo.getText().isEmpty() || terceiro.getText().isEmpty()){
@@ -247,33 +250,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 					double ing1 = Double.parseDouble(primeiro.getText());
 					double ing2 = Double.parseDouble(segundo.getText());
 					double ing3 = Double.parseDouble(terceiro.getText());
-					//Verifica se os valores são válidos.
-					if(ing1 > 0 && ing2 > 0 && ing3 > 0){
-						if(s.equals("Comum")){
-							pedido.addBiscoito(new Comum(ing1, ing2, ing3, constanteDeTempo));
-							System.out.println("Pedido de biscoito comum adicionado.");
-						}
-						else if(s.equals("Recheado")){
-							pedido.addBiscoito(new Recheado(ing1, ing2, ing3, constanteDeTempo));
-							System.out.println("Pedido de biscoito recheado adicionado.");
-						}
-						else{ // Nunca vai entrar aqui
-							System.out.println("Nenhuma opção selecionada");
-						}
-
-					// Atualiza os valores das filas.
-					String tamanhoTotal = String.valueOf(pedido.getTamanhoDasFilas());
-					String tamanhoDaFila1 = String.valueOf(pedido.getTamanhoDaFila1());
-					String tamanhoDaFila2 = String.valueOf(pedido.getTamanhoDaFila2());
-					String tamanhoDaFila3 = String.valueOf(pedido.getTamanhoDaFila3());
-					tamTotal.setText(tamanhoTotal);
-					tamFila1.setText(tamanhoDaFila1);
-					tamFila2.setText(tamanhoDaFila2);
-					tamFila3.setText(tamanhoDaFila3);
-					}
-					else{
-						JOptionPane.showMessageDialog(null, "Os ingredientes devem ser maiores que zero.");
-					}
+					addPedido("Usuario Local", "Autorizado", ing1, ing2, ing3, s);
+					
 				}
 				catch(NumberFormatException ex){
 					System.out.println("Erro: Algum campo não é um número.");
@@ -286,7 +264,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			botao2.setText(" Process started ");
 			botao2.setBackground(Color.GREEN);
 			run(); // Inicia o processo.
-			apertado = true;
+			
 			//String tamanhoDaFilas = String.valueOf(pedido.getTamanhoDasFilas());
 			//tamTotal.setText(tamanhoDaFilas);
 		}
@@ -296,8 +274,42 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		}
 	}
 
-	
+	/**
+	 * Método que adicionar pedido.
+	 */
+	public void addPedido(String usuario, String password, double ing1, double ing2, double ing3, String s){
+		//Verifica se os valores são válidos.
+		if(ing1 > 0 && ing2 > 0 && ing3 > 0){
+			if(s.equals("Comum")){
+				pedido.addBiscoito(new Comum(usuario, password, ing1, ing2, ing3, constanteDeTempo));
+				System.out.println("Pedido de biscoito comum adicionado.");
+			}
+			else if(s.equals("Recheado")){
+				pedido.addBiscoito(new Recheado(usuario, password, ing1, ing2, ing3, constanteDeTempo));
+				System.out.println("Pedido de biscoito recheado adicionado.");
+			}
+			else{ // Nunca vai entrar aqui
+				System.out.println("Nenhuma opção selecionada");
+			}
 
+		// Atualiza os valores das filas.
+		String tamanhoTotal = String.valueOf(pedido.getTamanhoDasFilas());
+		String tamanhoDaFila1 = String.valueOf(pedido.getTamanhoDaFila1());
+		String tamanhoDaFila2 = String.valueOf(pedido.getTamanhoDaFila2());
+		String tamanhoDaFila3 = String.valueOf(pedido.getTamanhoDaFila3());
+		tamTotal.setText(tamanhoTotal);
+		tamFila1.setText(tamanhoDaFila1);
+		tamFila2.setText(tamanhoDaFila2);
+		tamFila3.setText(tamanhoDaFila3);
+		}
+		else{
+			JOptionPane.showMessageDialog(null, "Os ingredientes devem ser maiores que zero.");
+		}
+	}
+
+	/**
+	 * Método que inicializa o processo/threads.
+	 */
 	@Override
 	public void run() {
 		addIgrediente1Linha1();
@@ -309,7 +321,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		addIgrediente1Linha3();
 		addIgrediente2Linha3();
 		addIgrediente3Linha3();
-		assar();		
+		assar();	
+			
 	}
 
 	/**
@@ -319,8 +332,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		desenharGraficos();
 		desenharGraficoRelatorio();
 		botao();
-		
-		//canvas.remove(GV2);
 
 	}
 
@@ -333,24 +344,25 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					addI1 = pedido.getBiscoitoFila1();
+					String tamanhoTotal = String.valueOf(pedido.getTamanhoDasFilas());
+					tamTotal.setText(tamanhoTotal);
 					String tamanhoDaFila1 = String.valueOf(pedido.getTamanhoDaFila1());
 					tamFila1.setText(tamanhoDaFila1);
-					while(addI1 == null){
+					while(addI1 != null){
+						acquire11();
+						a1.setText(addI1.getId());
+						canvas.add(GP1);
+						janela.repaint();
+						sleep(addI1.timeIngrediente1());
+						acquire12();
+						addI2 = addI1;
+						a1.setText("");
+						canvas.remove(GP1);
+						janela.repaint();
+						addI1 = null;
+						semaforo1.release();
 						sleep(0.001);
 					}
-					acquire11();
-					a1.setText(addI1.getId());
-					canvas.add(GP1);
-					janela.repaint();
-					sleep(addI1.timeIngrediente1());
-					acquire12();
-					addI2 = addI1;
-					a1.setText("");
-					canvas.remove(GP1);
-					janela.repaint();
-					addI1 = null;
-					semaforo1.release();
-					sleep(0.001);
 				}
 			}
 			
@@ -366,9 +378,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					while(addI2 == null){
-						if(addI1 == null){
-							return;
-						}
 						sleep(0.001);
 					}
 					a2.setText(addI2.getId());
@@ -398,9 +407,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					while(addI3 == null){
-						if(addI1 == null && addI2 == null){
-							return;
-						}
 						sleep(0.001);
 					}
 					a3.setText(addI3.getId());
@@ -433,25 +439,26 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					addI1L2 = pedido.getBiscoitoFila2();
+					String tamanhoTotal = String.valueOf(pedido.getTamanhoDasFilas());
+					tamTotal.setText(tamanhoTotal);
 					String tamanhoDaFila2 = String.valueOf(pedido.getTamanhoDaFila2());
 					tamFila2.setText(tamanhoDaFila2);
 					
-					while(addI1L2 == null){
-						sleep(0.001);
+					while(addI1L2 != null){
+						acquire21();
+						b1.setText(addI1L2.getId());
+						canvas.add(GP2);
+						janela.repaint();
+						sleep(addI1L2.timeIngrediente1());
+						acquire22();
+						addI2L2 = addI1L2;
+						b1.setText("");
+						canvas.remove(GP2);
+						janela.repaint();
+						addI1L2 = null;
+						semaforo21.release();
 					}
-					acquire21();
-					b1.setText(addI1L2.getId());
-					canvas.add(GP2);
-					janela.repaint();
-					sleep(addI1L2.timeIngrediente1());
-					acquire22();
-					addI2L2 = addI1L2;
-					b1.setText("");
-					canvas.remove(GP2);
-					janela.repaint();
-					addI1L2 = null;
-					semaforo21.release();
-					sleep(0.001);
+					
 				}
 			}
 			
@@ -467,9 +474,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					while(addI2L2 == null){
-						if(addI1L2 == null){
-							return;
-						}
 						sleep(0.001);
 					}
 					b2.setText(addI2L2.getId());
@@ -499,9 +503,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					while(addI3L2 == null){
-						if(addI1L2 == null && addI2L2 == null){
-							return;
-						}
 						sleep(0.001);
 					}
 					b3.setText(addI3L2.getId());
@@ -546,25 +547,26 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					addI1L3 = pedido.getBiscoitoFila3();
+					String tamanhoTotal = String.valueOf(pedido.getTamanhoDasFilas());
+					tamTotal.setText(tamanhoTotal);
 					String tamanhoDaFila3 = String.valueOf(pedido.getTamanhoDaFila3());
 					tamFila3.setText(tamanhoDaFila3);
 					
-					while(addI1L3 == null){
-						sleep(0.001);
+					while(addI1L3 != null){
+						acquire31();
+						c1.setText(addI1L3.getId());
+						canvas.add(GP3);
+						janela.repaint();
+						sleep(addI1L3.timeIngrediente1());
+						acquire32();
+						addI2L3 = addI1L3;
+						c1.setText("");
+						canvas.remove(GP3);
+						janela.repaint();
+						addI1L3 = null;
+						semaforo31.release();
 					}
-					acquire31();
-					c1.setText(addI1L3.getId());
-					canvas.add(GP3);
-					janela.repaint();
-					sleep(addI1L3.timeIngrediente1());
-					acquire32();
-					addI2L3 = addI1L3;
-					c1.setText("");
-					canvas.remove(GP3);
-					janela.repaint();
-					addI1L3 = null;
-					semaforo31.release();
-					sleep(0.001);
+					
 				}
 			}
 			
@@ -580,9 +582,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					while(addI2L3 == null){
-						if(addI1L3 == null){
-							return;
-						}
 						sleep(0.001);
 					}
 					c2.setText(addI2L3.getId());
@@ -612,9 +611,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			public void run(){
 				while(true){
 					while(addI3L3 == null){
-						if(addI1L3 == null && addI2L3 == null){
-							return;
-						}
 						sleep(0.001);
 					}
 					c3.setText(addI3L3.getId());
@@ -655,7 +651,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d1.setText("");
 						canvas.remove(F1);
 						janela.repaint();
-						String s = (forno1.getId() + " , fabricado forno 1, " + forno1); // Imprime o toString do objeto.
+						String s = (forno1.getId() + ", cliente: " + forno1.getUsuario() + " , fabricado forno 1, " + forno1); // Imprime o toString do objeto.
 						relatorioArea.append(s + "\n");
 						forno1 = null;
 						semaforoForno1.release();
@@ -677,7 +673,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d2.setText("");
 						canvas.remove(F2);
 						janela.repaint();
-						String a = (forno2.getId() + " , fabricado forno 2, " + forno2); // Imprime o toString do objeto.
+						String a = (forno2.getId() + ", cliente: " + forno2.getUsuario() + " , fabricado forno 2, " + forno2); // Imprime o toString do objeto.
 						relatorioArea.append(a + "\n");
 						forno2 = null;
 						semaforoForno2.release();
