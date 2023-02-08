@@ -8,7 +8,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-//import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -22,6 +21,17 @@ public class TCPServer {
         interfaceGrafica.executar();
         controleDeAcesso = new AccessControl();
         cadastrarCliente();
+    }
+    public static void send(String ip, String data) throws IOException {
+        System.out.println(data);
+        Socket socket = new Socket(ip, 9090); //localhost
+        PrintWriter write = new PrintWriter(socket.getOutputStream(), true);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonObject = mapper.createObjectNode();
+        //jsonObject.put("Dados", data);
+        
+        write.close();
+        socket.close();
     }
 
     public void startServer() {
@@ -37,7 +47,7 @@ public class TCPServer {
         }
     }
 
-    private class ClientHandler extends Thread {
+    public class ClientHandler extends Thread {
         private Socket clientSocket;
 
         ClientHandler(Socket clientSocket) {
@@ -48,14 +58,14 @@ public class TCPServer {
         public void run() {
             String user;
             String password;
+            String ip;
             String tipo;
             double ing1;
             double ing2;
             double ing3;
 
             try (
-                BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(clientSocket.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)
             ) {
                 // Lê os dados enviados pelo cliente.
@@ -64,10 +74,11 @@ public class TCPServer {
                 System.out.println("Pedido recebido: " + json);
                 JSONParser parser = new JSONParser();
                 try {
-                    JSONObject jsonObject = (JSONObject) parser.parse(json);
+                    JSONObject jsonObject = (JSONObject) parser.parse(json); // Converte o JSON para um objeto.
                     // Pega os valores do arquivo JSON.
                     user = (String) jsonObject.get("User");
                     password = (String) jsonObject.get("Password");
+                    ip = (String) jsonObject.get("ipClient");
                     tipo = (String) jsonObject.get("Tipo");
                     ing1 = Double.parseDouble((String)jsonObject.get("Ing1"));
                     ing2 = Double.parseDouble((String)jsonObject.get("Ing2"));
@@ -77,7 +88,7 @@ public class TCPServer {
                     if(controleDeAcesso.checkAccess(user, password)){
                         System.out.println("Acesso permitido!");
                         permissao = "                   Acesso permitido!";
-                        interfaceGrafica.addPedido(user, password, ing1, ing2, ing3, tipo);
+                        interfaceGrafica.addPedido(user, password,ip, ing1, ing2, ing3, tipo);
                     }else{
                         permissao = "           Usuario invalido. Acesso negado!";
                         System.out.println("Acesso negado.");

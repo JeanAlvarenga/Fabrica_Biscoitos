@@ -4,7 +4,7 @@
  * @version 4.7
  */
 
-public class App {
+public class AppServer {
     public static void main(String[] args){
         TCPServer server = new TCPServer();
         server.startServer();

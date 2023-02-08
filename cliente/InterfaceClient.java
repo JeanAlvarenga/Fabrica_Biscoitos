@@ -13,7 +13,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class InterfaceCliente extends JFrame implements ActionListener {
+public class InterfaceClient extends JFrame implements ActionListener {
 
     private JFrame janela = new JFrame("Add request");
     // Textos antes dos ingredientes:
@@ -40,7 +40,6 @@ public class InterfaceCliente extends JFrame implements ActionListener {
 
     // Cria os botões.
 	private JButton botao1 = new JButton(" Add request "); // Cria o botão com o texto " Adicionar pedido ".
-	private JButton botao2 = new JButton("  Open report "); // Cria o botão com o texto " parar processo ".
 	
     private CanvasCliente canvasCliente = new CanvasCliente();
     private TCPClient tcpClient;
@@ -64,7 +63,6 @@ public class InterfaceCliente extends JFrame implements ActionListener {
         ip.setBounds(340, 40, 70, 20);
         ipField.setBounds(410, 40, 100, 20);
 		botao1.setBounds(720, 10, 110, 20);
-        botao2.setBounds(850, 10, 120, 20);
         scrooll.setBounds(0, 210, 1117, 529);
 		// Tamanho da barra
         scrooll.setPreferredSize(new Dimension(250, 250));
@@ -79,7 +77,6 @@ public class InterfaceCliente extends JFrame implements ActionListener {
         canvasCliente.add(three);
         canvasCliente.add(terceiro);
         canvasCliente.add(botao1);
-        canvasCliente.add(botao2);
         canvasCliente.add(client);
         canvasCliente.add(clientField);
         canvasCliente.add(password);
@@ -98,9 +95,6 @@ public class InterfaceCliente extends JFrame implements ActionListener {
     public void botao(){
         //Quando clicamos no botão é executado o método addBiscoito da classe Pedido.
         botao1.addActionListener(this);
-
-        //Quando clicamos no botão é executado o método iniciarProcesso da classe Pedido.
-        botao2.addActionListener(this);
     }
 
     @Override
@@ -135,17 +129,17 @@ public class InterfaceCliente extends JFrame implements ActionListener {
                     e1.printStackTrace();
                 }
 			}
-		}
-        if(e.getSource() == botao2){
-
-        }
-        
+		}        
     }
+
+    public void addText(String text){
+        relatorioArea.append(text + "\n");
+    }
+
     public void run(){
         desenharGraficos();
         botao();
         tcpClient = new TCPClient();
     }
-    
     
 }

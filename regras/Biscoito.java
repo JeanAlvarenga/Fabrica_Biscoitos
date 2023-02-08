@@ -3,14 +3,15 @@ public abstract class Biscoito{
     private static int id = 0;
     private int idBiscoito;
     private final int constanteDeTempo;
-    private String usuario, password;
+    private String usuario, password, ip;
     private double ingrediente1, ingrediente2, ingrediente3;
 
     // Construtor
-    public Biscoito(String usuario, String password, double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo){
+    public Biscoito(String usuario, String password, String ip, double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo){
         id++;
         this.usuario = usuario;
         this.password = password;
+        this.ip = ip;
         this.ingrediente1 = ingrediente1;
         this.ingrediente2 = ingrediente2;
         this.ingrediente3 = ingrediente3;
@@ -48,6 +49,14 @@ public abstract class Biscoito{
      */
     public String getPassword() {
         return password;
+    }
+
+    /**
+     * Método que retorna o ip
+     * @return String com o ip
+     */
+    public String getIp() {
+        return ip;
     }
     
     /**

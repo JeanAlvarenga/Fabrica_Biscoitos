@@ -1,4 +1,7 @@
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,6 +22,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
     private static int constanteDeTempo = 1; //____________ MODIFICAR __________________
 	//private static double time; // Cria a variável "time" para armazenar o tempo sleep.
     private static Pedido pedido = new Pedido();
+
+	//private static TCPServer sendData = new TCPServer();
 	//
 	private static Biscoito addI1, addI2, addI3;
 	private static Biscoito addI1L2, addI2L2, addI3L2;
@@ -79,6 +84,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
 	//Cria os tipos dos biscoitos
 	private String[] tipos = { "Comum", "Recheado"};
+	private List<String> listaProducao = new ArrayList<>();
 	private JComboBox<String> listaTiposBiscoitos = new JComboBox<>(tipos); // Cria a lista de tipos de biscoitos.
 
 	// Cria os botões.
@@ -251,7 +257,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 					double ing1 = Double.parseDouble(primeiro.getText());
 					double ing2 = Double.parseDouble(segundo.getText());
 					double ing3 = Double.parseDouble(terceiro.getText());
-					addPedido("Usuario Local", "Autorizado", ing1, ing2, ing3, s);
+					addPedido("Usuario Local", "Autorizado", "localhost", ing1, ing2, ing3, s);
 					
 				}
 				catch(NumberFormatException ex){
@@ -278,15 +284,15 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	/**
 	 * Método que adicionar pedido.
 	 */
-	public void addPedido(String usuario, String password, double ing1, double ing2, double ing3, String s){
+	public void addPedido(String usuario, String password, String ip, double ing1, double ing2, double ing3, String s){
 		//Verifica se os valores são válidos.
 		if(ing1 > 0 && ing2 > 0 && ing3 > 0){
 			if(s.equals("Comum")){
-				pedido.addBiscoito(new Comum(usuario, password, ing1, ing2, ing3, constanteDeTempo));
+				pedido.addBiscoito(new Comum(usuario, password, ip, ing1, ing2, ing3, constanteDeTempo));
 				System.out.println("Pedido de biscoito comum adicionado.");
 			}
 			else if(s.equals("Recheado")){
-				pedido.addBiscoito(new Recheado(usuario, password, ing1, ing2, ing3, constanteDeTempo));
+				pedido.addBiscoito(new Recheado(usuario, password, ip, ing1, ing2, ing3, constanteDeTempo));
 				System.out.println("Pedido de biscoito recheado adicionado.");
 			}
 			else{ // Nunca vai entrar aqui
@@ -654,6 +660,13 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						janela.repaint();
 						String s = (forno1.getId() + ", cliente: " + forno1.getUsuario() + " , fabricado forno 1, " + forno1); // Imprime o toString do objeto.
 						relatorioArea.append(s + "\n");
+						System.out.println("ip = " + forno1.getIp());
+						System.out.println("s = " + s);
+						try {
+							TCPServer.send(forno1.getIp(), s);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 						forno1 = null;
 						semaforoForno1.release();
 						
@@ -676,6 +689,12 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						janela.repaint();
 						String a = (forno2.getId() + ", cliente: " + forno2.getUsuario() + " , fabricado forno 2, " + forno2); // Imprime o toString do objeto.
 						relatorioArea.append(a + "\n");
+						System.out.println("ip = " + forno2.getIp());
+						try {
+							TCPServer.send(forno1.getIp(), a);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 						forno2 = null;
 						semaforoForno2.release();
 						
@@ -684,6 +703,11 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			}).start();
 	}
 
+	public String getRelatorio(){
+		System.out.println(listaProducao.toString());
+		return listaProducao.toString();
+	}
+		
 	/**
 	 * Método que simula o tempo de espera.
 	 * @param time do tipo double.

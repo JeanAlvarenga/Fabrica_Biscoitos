@@ -24,17 +24,17 @@ public class AccessControl {
     }
 
     private class UserData {
-        private String username;
+        //private String username;
         private String password;
 
         public UserData(String username, String password) {
-            this.username = username;
+            //this.username = username;
             this.password = password;
         }
 
-        public String getUsername() {
-            return username;
-        }
+        // public String getUsername() {
+        //     return username;
+        // }
 
         public String getPassword() {
             return password;

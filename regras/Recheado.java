@@ -4,8 +4,8 @@ public class Recheado extends Biscoito{
      /**
      * Construtor
      */
-    public Recheado(String usuario, String password, double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo) {
-        super(usuario, password, ingrediente1, ingrediente2, ingrediente3, constanteDeTempo);
+    public Recheado(String usuario, String password,String ip, double ingrediente1, double ingrediente2, double ingrediente3, int constanteDeTempo) {
+        super(usuario, password, ip, ingrediente1, ingrediente2, ingrediente3, constanteDeTempo);
     }
     
     @Override
