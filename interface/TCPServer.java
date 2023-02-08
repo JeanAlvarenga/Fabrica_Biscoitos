@@ -15,6 +15,8 @@ public class TCPServer {
     private Interface interfaceGrafica;
     private AccessControl controleDeAcesso;
     private String permissao;
+    private static ObjectMapper map = new ObjectMapper();
+    private static ObjectNode json = map.createObjectNode();
 
     public TCPServer(){
         interfaceGrafica = new Interface();
@@ -23,15 +25,11 @@ public class TCPServer {
         cadastrarCliente();
     }
     public static void send(String ip, String data) throws IOException {
+        System.out.println(ip);
         System.out.println(data);
-        Socket socket = new Socket(ip, 9090); //localhost
-        PrintWriter write = new PrintWriter(socket.getOutputStream(), true);
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode jsonObject = mapper.createObjectNode();
-        //jsonObject.put("Dados", data);
-        
-        write.close();
-        socket.close();
+        json.put("Dados", data);
+        //write.println(jsonObject.toString());
+        //System.out.println(jsonObject.toString());
     }
 
     public void startServer() {
@@ -88,7 +86,12 @@ public class TCPServer {
                     if(controleDeAcesso.checkAccess(user, password)){
                         System.out.println("Acesso permitido!");
                         permissao = "                   Acesso permitido!";
-                        interfaceGrafica.addPedido(user, password,ip, ing1, ing2, ing3, tipo);
+                        if(ing1 == 0 && ing2 == 0 && ing3 == 0){
+                            
+                        }
+                        else{
+                            interfaceGrafica.addPedido(user, password,ip, ing1, ing2, ing3, tipo);
+                        }
                     }else{
                         permissao = "           Usuario invalido. Acesso negado!";
                         System.out.println("Acesso negado.");

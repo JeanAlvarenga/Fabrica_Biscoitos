@@ -29,7 +29,7 @@ Referencias:
 [27] https://www.youtube.com/watch?v=BQ2m2HAPjR0&ab_channel=%C3%81reaTechBrasil
 [28] https://www.youtube.com/watch?v=mKzud0KdRMg&ab_channel=DaviFontenele
 [29] https://www.tabnine.com/code/java/methods/org.json.JSONObject/getDouble
-[30]
+[30] https://stackoverflow.com/questions/10069059/is-it-possible-to-run-a-socket-server-and-socket-client-on-the-same-machine
 [31]
 [32]
 [33]
