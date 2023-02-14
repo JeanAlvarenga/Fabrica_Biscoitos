@@ -7,6 +7,8 @@ import java.net.Socket;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,8 +17,9 @@ public class TCPServer {
     private Interface interfaceGrafica;
     private AccessControl controleDeAcesso;
     private String permissao;
-    private static ObjectMapper map = new ObjectMapper();
-    private static ObjectNode json = map.createObjectNode();
+    //private static ObjectMapper map = new ObjectMapper();
+    //private static ObjectNode json = map.createObjectNode();
+    private static Map<String, String> pedidos = new HashMap<String, String>();
 
     public TCPServer(){
         interfaceGrafica = new Interface();
@@ -25,11 +28,17 @@ public class TCPServer {
         cadastrarCliente();
     }
     public static void send(String ip, String data) throws IOException {
-        System.out.println(ip);
-        System.out.println(data);
-        json.put("Dados", data);
-        //write.println(jsonObject.toString());
-        //System.out.println(jsonObject.toString());
+        //System.out.println(ip);
+        //System.out.println(data);
+        addPedidoConcluido(ip, data);
+    }
+
+    public static void addPedidoConcluido(String usuario, String pedido) {
+        pedidos.put(usuario, pedido);
+    }
+
+    public String getPedidoConcluido(String usuario) {
+        return pedidos.get(usuario);
     }
 
     public void startServer() {
@@ -54,6 +63,7 @@ public class TCPServer {
 
         @Override
         public void run() {
+            String requisicao;
             String user;
             String password;
             String ip;
@@ -74,6 +84,7 @@ public class TCPServer {
                 try {
                     JSONObject jsonObject = (JSONObject) parser.parse(json); // Converte o JSON para um objeto.
                     // Pega os valores do arquivo JSON.
+                    requisicao = (String) jsonObject.get("Requisicao");
                     user = (String) jsonObject.get("User");
                     password = (String) jsonObject.get("Password");
                     ip = (String) jsonObject.get("ipClient");
@@ -82,30 +93,43 @@ public class TCPServer {
                     ing2 = Double.parseDouble((String)jsonObject.get("Ing2"));
                     ing3 = Double.parseDouble((String)jsonObject.get("Ing3"));
 
+                    ObjectNode response = mapper.createObjectNode();
                     // Adiciona o pedido na fila.
                     if(controleDeAcesso.checkAccess(user, password)){
                         System.out.println("Acesso permitido!");
                         permissao = "                   Acesso permitido!";
-                        if(ing1 == 0 && ing2 == 0 && ing3 == 0){
+                        if(requisicao.equals("Pedido")){
+                            interfaceGrafica.addPedido(user, password, ip, ing1, ing2, ing3, tipo);
+
+                            // Envia uma mensagem de confirmação para o cliente.
                             
+                            response.put("status", permissao);
+                            response.put("message", "                   Acesso permitido!\n" + "Pedido recebido e processado com sucesso. ");
+                            writer.println(response.toString());
+                            writer.println("Recebido.");
+
                         }
-                        else{
-                            interfaceGrafica.addPedido(user, password,ip, ing1, ing2, ing3, tipo);
+                        else if(requisicao.equals("requisicao")){
+                            response.put("status", "Pedido concluido");
+                            
+                            for(int i = 1; i <= pedidos.size(); i++){
+                                response.put("message", pedidos.get(ip));
+                                writer.println(response.toString());
+                            }
+                            // writer.println("Recebido.");
                         }
                     }else{
-                        permissao = "           Usuario invalido. Acesso negado!";
-                        System.out.println("Acesso negado.");
+                        permissao = "Usuario invalido. Acesso negado!";
+                        response.put("status", permissao);
+                        response.put("message", "           Pedido recebido\n" + "Usuario invalido. Acesso negado!");
+                        writer.println(response.toString());
+                        System.out.println("   Acesso negado.");
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                // Envia uma mensagem de confirmação para o cliente.
-                ObjectNode response = mapper.createObjectNode();
-                response.put("status", permissao);
-                response.put("message", "Pedido recebido e processado com sucesso. ");
-                writer.println(response.toString());
-                writer.println("Recebido.");
+                
 
             } catch (IOException e) {
                 System.err.println("Error handling client.");

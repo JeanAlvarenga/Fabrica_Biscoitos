@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InterfaceClient extends JFrame implements ActionListener {
 
@@ -40,9 +42,12 @@ public class InterfaceClient extends JFrame implements ActionListener {
 
     // Cria os botões.
 	private JButton botao1 = new JButton(" Add request "); // Cria o botão com o texto " Adicionar pedido ".
-	
+	private JButton botao2 = new JButton(" Fetch report "); // Cria o botão com o texto "burcar relatório"
+
     private CanvasCliente canvasCliente = new CanvasCliente();
     private TCPClient tcpClient;
+    private List <String> relatorio = new ArrayList<String>();
+    private String statusAux;
 
 
     public void desenharGraficos() {
@@ -63,6 +68,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
         ip.setBounds(340, 40, 70, 20);
         ipField.setBounds(410, 40, 100, 20);
 		botao1.setBounds(720, 10, 110, 20);
+        botao2.setBounds(720, 40, 110, 20);
         scrooll.setBounds(0, 210, 1117, 529);
 		// Tamanho da barra
         scrooll.setPreferredSize(new Dimension(250, 250));
@@ -77,6 +83,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
         canvasCliente.add(three);
         canvasCliente.add(terceiro);
         canvasCliente.add(botao1);
+        canvasCliente.add(botao2);
         canvasCliente.add(client);
         canvasCliente.add(clientField);
         canvasCliente.add(password);
@@ -95,6 +102,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
     public void botao(){
         //Quando clicamos no botão é executado o método addBiscoito da classe Pedido.
         botao1.addActionListener(this);
+        botao2.addActionListener(this);
     }
 
     @Override
@@ -117,7 +125,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
 					String ing2 = segundo.getText();
 					String ing3 = terceiro.getText();
 					
-                    status = tcpClient.createJSON(ip, client, password, s, ing1, ing2, ing3);
+                    status = tcpClient.createJSON("Pedido", ip, client, password, s, ing1, ing2, ing3);
 
                     JOptionPane.showMessageDialog(null, status);
 					
@@ -129,11 +137,31 @@ public class InterfaceClient extends JFrame implements ActionListener {
                     e1.printStackTrace();
                 }
 			}
-		}        
+		}  
+        else if(e.getSource() == botao2){
+            String ip = ipField.getText();
+            String client = clientField.getText();
+            String password = passwordField.getText();
+            String status;
+            try {
+                status = tcpClient.createJSON("requisicao", ip, client, password, "0", "0", "0", "0");
+                if(!status.equals(statusAux)){
+                    relatorio.add(status);
+                    statusAux = status;
+                }
+                relatorioArea.setText("");
+                for(int i = 0; i < relatorio.size(); i++){
+                        relatorioArea.append(relatorio.get(i));
+                }
+                //relatorioArea.append(status + "\n");
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }     
     }
 
     public void addText(String text){
-        relatorioArea.append(text + "\n");
+        relatorioArea.append(text);
     }
 
     public void run(){
