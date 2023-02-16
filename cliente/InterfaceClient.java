@@ -162,13 +162,31 @@ public class InterfaceClient extends JFrame implements ActionListener {
                 }
                 relatorioArea.setText("");
                 for(int i = 0; i < relatorio.size(); i++){
-                        relatorioArea.append(relatorio.get(i));
+                        relatorioArea.append(relatorio.get(i)+"\n");
                 }
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
         }    
         else if(e.getSource() == botao3){
+            String ip = ipField.getText();
+            String client = clientField.getText();
+            String password = passwordField.getText();
+            String producao;
+            try {
+                producao = tcpClient.createJSON("estatistica", ip, client, password, "0", "0", "0", "0");
+                System.out.println("Chegou: "+ producao);
+                String[] producaoSplit = producao.split(":");
+                for(int i = 0; i < producaoSplit.length; i++){
+                    String[] producaoSplit2 = producaoSplit[i].split(":");
+                    System.out.println("Tamanho: "+producaoSplit2.length);
+                    for(int j = 0; j < producaoSplit2.length; j++){
+                        System.out.println("Producao: "+producaoSplit2[j]);
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             criarGrafico();
             janelaGrafico.setVisible(true);
             
@@ -197,6 +215,9 @@ public class InterfaceClient extends JFrame implements ActionListener {
         barra.setValue(10, "Pedido 1", ""); //Adiciona o valor 10 no pedido 1.
         barra.setValue(20, "Pedido 2", "");
         barra.setValue(10, "Pedido 3", "");
+        barra.setValue(30, "Pedido 4", "");
+        barra.setValue(16, "Pedido 5", "");
+        //barra.setGroup("Pedido 1", "Pedido 2", "Pedido 3", "Pedido 4", "Pedido 5"); //Agrupa os pedidos.
 
         JFreeChart grafico = ChartFactory.createBarChart3D("Relatório de Tendência de Produção", "Pedidos", "Quantidade", barra, PlotOrientation.VERTICAL, true, true, false); //Cria o gráfico de barras.
         ChartPanel painel = new ChartPanel(grafico); //Cria um painel para o gráfico.

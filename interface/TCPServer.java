@@ -7,7 +7,10 @@ import java.net.Socket;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +21,7 @@ public class TCPServer {
     private AccessControl controleDeAcesso;
     private String permissao;
     private static Map<String, String> pedidos = new HashMap<String, String>();
+    private static List<Integer> listaDeBiscoitos = new ArrayList<Integer>();
 
     public TCPServer(){
         interfaceGrafica = new Interface();
@@ -28,7 +32,11 @@ public class TCPServer {
     public static void send(String ip, String data) throws IOException {
         //System.out.println(ip);
         //System.out.println(data);
-        pedidos.put(ip, data);
+        pedidos.put(ip, data); // Adiciona os dados de produçao na lista de pedidos atraves do ip do cliente.
+    }
+
+    public static void addGrafico(int quantidadeBiscoitosProduzidos) {
+        listaDeBiscoitos.add(quantidadeBiscoitosProduzidos); // Adiciona o pedido na lista de pedidos.
     }
 
     public String getPedidoConcluido(String usuario) {
@@ -113,11 +121,12 @@ public class TCPServer {
                         }
                         else if(requisicao.equals("estatistica")){
                             response.put("status", "Feito!");
-                            
-                            for(int i = 1; i <= pedidos.size(); i++){
-                                response.put("message", pedidos.get(ip));
-                                writer.println(response.toString());
+                            String lista = "";
+                            for(int i = 0; i < listaDeBiscoitos.size(); i++){
+                                lista += listaDeBiscoitos.get(i).toString()+":";
                             }
+                            response.put("message",lista);
+                            writer.println(response.toString());
                         }
 
                     }else{

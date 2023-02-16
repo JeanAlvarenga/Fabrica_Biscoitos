@@ -644,7 +644,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	 * Método que adiciona biscoito no forno.
 	 */
 	public void assar(){
-			new Thread(new Runnable() {
+			new Thread(new Runnable() { // Thread que adiciona o biscoito no forno 1.
 				@Override
 				public void run(){
 					while(true){
@@ -663,6 +663,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						//System.out.println("ip = " + forno1.getIp());
 						try {
 							TCPServer.send(forno1.getIp(), s);
+							TCPServer.addGrafico(forno1.calcularQuantidadeBiscoitos());
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -673,7 +674,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 					}
 				}
 			}).start();
-			new Thread(new Runnable() {
+			new Thread(new Runnable() { // Thread que adiciona o biscoito no forno 2.
 				public void run(){
 					while(true){
 						while(forno2 == null){
@@ -691,6 +692,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						//System.out.println("ip = " + forno2.getIp());
 						try {
 							TCPServer.send(forno2.getIp(), a);
+							TCPServer.addGrafico(forno2.calcularQuantidadeBiscoitos());
 						} catch (IOException e) {
 							e.printStackTrace();
 						}

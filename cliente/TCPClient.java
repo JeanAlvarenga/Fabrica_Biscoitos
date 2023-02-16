@@ -42,6 +42,6 @@ public class TCPClient {
         reader.close();
         write.close();
         socket.close();
-        return message + "\n";
+        return message;
     }
 }
