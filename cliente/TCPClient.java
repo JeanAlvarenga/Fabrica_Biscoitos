@@ -31,6 +31,7 @@ public class TCPClient {
         write.println(jsonObject.toString()); //envia o json para o servidor
 
         String response = reader.readLine(); //recebe a resposta do servidor
+        //System.out.println("resposta " + response);
         JsonNode jsonNode = mapper.readTree(response);
         String user = jsonNode.get("status").asText();
         String message = jsonNode.get("message").asText();

@@ -30,8 +30,8 @@ Referencias:
 [28] https://www.youtube.com/watch?v=mKzud0KdRMg&ab_channel=DaviFontenele
 [29] https://www.tabnine.com/code/java/methods/org.json.JSONObject/getDouble
 [30] https://stackoverflow.com/questions/10069059/is-it-possible-to-run-a-socket-server-and-socket-client-on-the-same-machine
-[31]
-[32]
-[33]
+[31] https://www.youtube.com/watch?v=5lNQLR53UtY&ab_channel=Foxandroid
+[32] https://www.youtube.com/watch?v=yzLx7GYf2xE&t=1732s&ab_channel=CodingUTBM
+[33] https://www.youtube.com/watch?v=BkSayXDdRFQ&ab_channel=CarlosHenriqueJava
 [34]
 [35]

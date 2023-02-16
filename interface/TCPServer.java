@@ -17,8 +17,6 @@ public class TCPServer {
     private Interface interfaceGrafica;
     private AccessControl controleDeAcesso;
     private String permissao;
-    //private static ObjectMapper map = new ObjectMapper();
-    //private static ObjectNode json = map.createObjectNode();
     private static Map<String, String> pedidos = new HashMap<String, String>();
 
     public TCPServer(){
@@ -30,11 +28,7 @@ public class TCPServer {
     public static void send(String ip, String data) throws IOException {
         //System.out.println(ip);
         //System.out.println(data);
-        addPedidoConcluido(ip, data);
-    }
-
-    public static void addPedidoConcluido(String usuario, String pedido) {
-        pedidos.put(usuario, pedido);
+        pedidos.put(ip, data);
     }
 
     public String getPedidoConcluido(String usuario) {
@@ -116,8 +110,16 @@ public class TCPServer {
                                 response.put("message", pedidos.get(ip));
                                 writer.println(response.toString());
                             }
-                            // writer.println("Recebido.");
                         }
+                        else if(requisicao.equals("estatistica")){
+                            response.put("status", "Feito!");
+                            
+                            for(int i = 1; i <= pedidos.size(); i++){
+                                response.put("message", pedidos.get(ip));
+                                writer.println(response.toString());
+                            }
+                        }
+
                     }else{
                         permissao = "Usuario invalido. Acesso negado!";
                         response.put("status", permissao);

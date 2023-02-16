@@ -15,9 +15,16 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 public class InterfaceClient extends JFrame implements ActionListener {
 
     private JFrame janela = new JFrame("Add request");
+    private JFrame janelaGrafico = new JFrame("Fetch report");
     // Textos antes dos ingredientes:
 	private JLabel tipo = new JLabel("Tipo:");
     private JLabel one = new JLabel("Ingredient 1"); // Cria o label "Ingredient 1".
@@ -43,6 +50,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
     // Cria os botões.
 	private JButton botao1 = new JButton(" Add request "); // Cria o botão com o texto " Adicionar pedido ".
 	private JButton botao2 = new JButton(" Fetch report "); // Cria o botão com o texto "burcar relatório"
+    private JButton botao3 = new JButton(" Statistic "); // Cria o botão com o texto "burcar relatório"
 
     private CanvasCliente canvasCliente = new CanvasCliente();
     private TCPClient tcpClient;
@@ -69,6 +77,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
         ipField.setBounds(410, 40, 100, 20);
 		botao1.setBounds(720, 10, 110, 20);
         botao2.setBounds(720, 40, 110, 20);
+        botao3.setBounds(840, 10, 110, 20);
         scrooll.setBounds(0, 210, 1117, 529);
 		// Tamanho da barra
         scrooll.setPreferredSize(new Dimension(250, 250));
@@ -84,6 +93,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
         canvasCliente.add(terceiro);
         canvasCliente.add(botao1);
         canvasCliente.add(botao2);
+        canvasCliente.add(botao3);
         canvasCliente.add(client);
         canvasCliente.add(clientField);
         canvasCliente.add(password);
@@ -103,6 +113,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
         //Quando clicamos no botão é executado o método addBiscoito da classe Pedido.
         botao1.addActionListener(this);
         botao2.addActionListener(this);
+        botao3.addActionListener(this);
     }
 
     @Override
@@ -153,11 +164,15 @@ public class InterfaceClient extends JFrame implements ActionListener {
                 for(int i = 0; i < relatorio.size(); i++){
                         relatorioArea.append(relatorio.get(i));
                 }
-                //relatorioArea.append(status + "\n");
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-        }     
+        }    
+        else if(e.getSource() == botao3){
+            criarGrafico();
+            janelaGrafico.setVisible(true);
+            
+        } 
     }
 
     public void addText(String text){
@@ -166,8 +181,26 @@ public class InterfaceClient extends JFrame implements ActionListener {
 
     public void run(){
         desenharGraficos();
+        desenharJannelaGrafico();
         botao();
         tcpClient = new TCPClient();
+    }
+
+    public void desenharJannelaGrafico(){
+        janelaGrafico = new JFrame("Statistic");
+        janelaGrafico.setSize(950, 600);
+        janelaGrafico.setLocationRelativeTo(null);
+    }
+
+    public void criarGrafico(){
+        DefaultCategoryDataset barra = new DefaultCategoryDataset(); //Cria um objeto do tipo DefaultCategoryDataset.
+        barra.setValue(10, "Pedido 1", ""); //Adiciona o valor 10 no pedido 1.
+        barra.setValue(20, "Pedido 2", "");
+        barra.setValue(10, "Pedido 3", "");
+
+        JFreeChart grafico = ChartFactory.createBarChart3D("Relatório de Tendência de Produção", "Pedidos", "Quantidade", barra, PlotOrientation.VERTICAL, true, true, false); //Cria o gráfico de barras.
+        ChartPanel painel = new ChartPanel(grafico); //Cria um painel para o gráfico.
+        janelaGrafico.add(painel); //Adiciona o painel na janela.
     }
     
 }
