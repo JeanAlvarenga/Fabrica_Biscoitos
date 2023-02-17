@@ -113,11 +113,15 @@ public class TCPServer {
                         }
                         else if(requisicao.equals("requisicao")){
                             response.put("status", "Pedido concluido");
-                            
-                            for(int i = 1; i <= pedidos.size(); i++){
-                                response.put("message", pedidos.get(ip));
-                                writer.println(response.toString());
+                            String lista = "";
+                            for (String key : pedidos.keySet()) {
+                                if(key.equals(ip)){
+                                    lista += pedidos.get(key) + "\n";
+                                }
                             }
+                                
+                            response.put("message", lista);
+                            writer.println(response.toString());
                         }
                         else if(requisicao.equals("estatistica")){
                             response.put("status", "Feito!");
@@ -155,3 +159,25 @@ public class TCPServer {
         controleDeAcesso.registerUser("Samuel", "12345678");
     }
 }
+
+
+/*
+ * import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
+Map<String, String> hashMap = new HashMap<>();
+hashMap.put("key1", "value1");
+hashMap.put("key2", "value2");
+hashMap.put("key1", "value3");
+
+Multimap<String, String> multimap = ArrayListMultimap.create();
+
+// populate the Multimap with the HashMap values
+for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+    multimap.put(entry.getKey(), entry.getValue());
+}
+
+// fetch all the elements with a given key
+Collection<String> valuesForKey1 = multimap.get("key1");
+
+ */
