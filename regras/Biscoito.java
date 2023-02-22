@@ -105,6 +105,6 @@ public abstract class Biscoito{
     
     @Override
     public String toString() {
-        return "Peso utilizado: ingrediente1: " + ingrediente1 + " Kg, ingrediente2: " + ingrediente2 + " Kg, ingrediente3: " + ingrediente3 + " Kg, total: " + calcularQuantidadeIngredientes() + " Kg.";
+        return "Peso utilizado: ingrediente1: " + ingrediente1 + " Kg ingrediente2: " + ingrediente2 + " Kg ingrediente3: " + ingrediente3 + " Kg. Total: " + calcularQuantidadeIngredientes() + " Kg.";
     }
 }

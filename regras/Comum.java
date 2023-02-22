@@ -23,22 +23,22 @@ public class Comum extends Biscoito{
         String s;
         int hora, minuto, segundo;
         if(calcularTempo() < 60){
-            s = "tipo comum, tempo de producao: " + (int)calcularTempo() + " seg. " + 
+            s = "tipo comum. Tempo de producao: " + (int)calcularTempo() + " seg. " + 
             calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         else if(calcularTempo() < 3600 && calcularTempo() >= 60){
             minuto = (int) calcularTempo() / 60;
             segundo = (int) calcularTempo() % 60;
-            s = "tipo comum, tempo de producao: " + minuto + " min, " + segundo + " seg, " + 
+            s = "tipo comum. Tempo de producao: " + minuto + " min " + segundo + " seg. " + 
             calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         else{
             hora = (int) calcularTempo() / 3600;
             minuto = (int) calcularTempo() % 3600 / 60;
             segundo = (int) calcularTempo() % 3600 % 60;
-            s = "tipo comum, " + "quantidade: "+ calcularQuantidadeBiscoitos() +
-            "tempo de producao: " + hora + " horas, " + minuto + " min. " + segundo +
-            " seg, " + calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
+            s = "tipo comum " + "quantidade: "+ calcularQuantidadeBiscoitos() +
+            "Tempo de producao: " + hora + " horas " + minuto + " min. " + segundo +
+            " seg. " + calcularQuantidadeBiscoitos() + " biscoitos produzidos. "+ super.toString();
         }
         return s;
     }

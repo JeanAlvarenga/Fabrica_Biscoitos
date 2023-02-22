@@ -658,7 +658,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d1.setText("");
 						canvas.remove(F1);
 						janela.repaint();
-						String s = (forno1.getId() + ", cliente: " + forno1.getUsuario() + " , fabricado forno 1, " + forno1); // Imprime o toString do objeto.
+						String s = (forno1.getId() + ". Cliente: " + forno1.getUsuario() + " . Fabricado forno 1. " + forno1); // Imprime o toString do objeto.
 						relatorioArea.append(s + "\n");
 						//System.out.println("ip = " + forno1.getIp());
 						try {
@@ -687,7 +687,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						d2.setText("");
 						canvas.remove(F2);
 						janela.repaint();
-						String a = (forno2.getId() + ", cliente: " + forno2.getUsuario() + " , fabricado forno 2, " + forno2); // Imprime o toString do objeto.
+						String a = (forno2.getId() + ". Cliente: " + forno2.getUsuario() + " . Fabricado forno 2. " + forno2); // Imprime o toString do objeto.
 						relatorioArea.append(a + "\n");
 						//System.out.println("ip = " + forno2.getIp());
 						try {

@@ -9,19 +9,20 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 public class TCPServer {
     private Interface interfaceGrafica;
     private AccessControl controleDeAcesso;
     private String permissao;
-    private static Map<String, String> pedidos = new HashMap<String, String>();
-    private static List<String> listaDeBiscoitos = new ArrayList<String>();
+    private static Multimap<String, String> pedidos = ArrayListMultimap.create();
+    private static List<String> listaDeBiscoitos = new ArrayList<String>(); // Lista de pedidos do relatorio.
 
     public TCPServer(){
         interfaceGrafica = new Interface();
@@ -29,18 +30,12 @@ public class TCPServer {
         controleDeAcesso = new AccessControl();
         cadastrarCliente();
     }
-    public static void send(String ip, String data) throws IOException {
-        //System.out.println(ip);
-        //System.out.println(data);
+    public static void send(String ip, String data) throws IOException { 
         pedidos.put(ip, data); // Adiciona os dados de produçao na lista de pedidos atraves do ip do cliente.
     }
 
     public static void addGrafico(String quantidadeBiscoitosProduzidos) {
         listaDeBiscoitos.add(quantidadeBiscoitosProduzidos); // Adiciona o pedido na lista de pedidos.
-    }
-
-    public String getPedidoConcluido(String usuario) {
-        return pedidos.get(usuario);
     }
 
     public void startServer() {
@@ -112,15 +107,8 @@ public class TCPServer {
 
                         }
                         else if(requisicao.equals("requisicao")){
-                            response.put("status", "Pedido concluido");
-                            String lista = "";
-                            for (String key : pedidos.keySet()) {
-                                if(key.equals(ip)){
-                                    lista += pedidos.get(key) + "\n";
-                                }
-                            }
-                                
-                            response.put("message", lista);
+                            response.put("status", "Pedido concluido");  
+                            response.put("message", pedidos.get(ip).toString());
                             writer.println(response.toString());
                         }
                         else if(requisicao.equals("estatistica")){
@@ -159,25 +147,3 @@ public class TCPServer {
         controleDeAcesso.registerUser("Samuel", "12345678");
     }
 }
-
-
-/*
- * import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
-Map<String, String> hashMap = new HashMap<>();
-hashMap.put("key1", "value1");
-hashMap.put("key2", "value2");
-hashMap.put("key1", "value3");
-
-Multimap<String, String> multimap = ArrayListMultimap.create();
-
-// populate the Multimap with the HashMap values
-for (Map.Entry<String, String> entry : hashMap.entrySet()) {
-    multimap.put(entry.getKey(), entry.getValue());
-}
-
-// fetch all the elements with a given key
-Collection<String> valuesForKey1 = multimap.get("key1");
-
- */

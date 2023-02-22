@@ -56,7 +56,7 @@ public class Pedido {
         if(!fila1.isEmpty()){
             Biscoito b = fila1.poll();
             tamanhoDaFila1--;
-            tamanhoDasFilas--;
+            //tamanhoDasFilas--;
             //System.out.println(b.getId()); // Imprime o id do pedido que foi retirado da fila
             return b;
         }
@@ -74,7 +74,7 @@ public class Pedido {
         if(!fila2.isEmpty()){
             Biscoito b = fila2.poll();
             tamanhoDaFila2--;
-            tamanhoDasFilas--;
+            //tamanhoDasFilas--;
             //System.out.println(b.getId()); // Imprime o id do pedido que foi retirado da fila
             return b;
         }
@@ -92,7 +92,7 @@ public class Pedido {
         if(!fila3.isEmpty()){
             Biscoito b = fila3.poll();
             tamanhoDaFila3--;
-            tamanhoDasFilas--;
+            //tamanhoDasFilas--;
             //System.out.println(b.getId()); // Imprime o id do pedido que foi retirado da fila
             return b;
         }

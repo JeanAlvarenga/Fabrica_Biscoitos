@@ -151,14 +151,11 @@ public class InterfaceClient extends JFrame implements ActionListener {
             String status;
             try {
                 status = tcpClient.createJSON("requisicao", ip, client, password, "0", "0", "0", "0");
-                // if(!status.equals(statusAux)){
-                //     relatorio.add(status);
-                //     statusAux = status;
-                // }
                  relatorioArea.setText("");
-                // for(int i = 0; i < relatorio.size(); i++){
-                        relatorioArea.append(status+"\n");
-                //}
+                 String[] valores = status.split(",");
+                for(int i = 0; i < valores.length; i++){
+                        relatorioArea.append(valores[i] +"\n");
+                }
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
