@@ -21,7 +21,7 @@ public class TCPServer {
     private AccessControl controleDeAcesso;
     private String permissao;
     private static Map<String, String> pedidos = new HashMap<String, String>();
-    private static List<Integer> listaDeBiscoitos = new ArrayList<Integer>();
+    private static List<String> listaDeBiscoitos = new ArrayList<String>();
 
     public TCPServer(){
         interfaceGrafica = new Interface();
@@ -35,7 +35,7 @@ public class TCPServer {
         pedidos.put(ip, data); // Adiciona os dados de produçao na lista de pedidos atraves do ip do cliente.
     }
 
-    public static void addGrafico(int quantidadeBiscoitosProduzidos) {
+    public static void addGrafico(String quantidadeBiscoitosProduzidos) {
         listaDeBiscoitos.add(quantidadeBiscoitosProduzidos); // Adiciona o pedido na lista de pedidos.
     }
 
@@ -127,7 +127,7 @@ public class TCPServer {
                             response.put("status", "Feito!");
                             String lista = "";
                             for(int i = 0; i < listaDeBiscoitos.size(); i++){
-                                lista += listaDeBiscoitos.get(i).toString()+":";
+                                lista += listaDeBiscoitos.get(i).toString()+";";
                             }
                             response.put("message",lista);
                             writer.println(response.toString());
@@ -154,7 +154,7 @@ public class TCPServer {
 
     }
     public void cadastrarCliente(){
-        controleDeAcesso.registerUser("Jean", "12345678");
+        controleDeAcesso.registerUser("Jean", "123");
         controleDeAcesso.registerUser("Daniel", "12345678");
         controleDeAcesso.registerUser("Samuel", "12345678");
     }

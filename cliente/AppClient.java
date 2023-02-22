@@ -16,7 +16,7 @@ public class AppClient {
     }
     
     public void startServer() {
-        try (ServerSocket serverSocket = new ServerSocket(9001)) {
+        try (ServerSocket serverSocket = new ServerSocket(9090)) {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Cliente conectado.");

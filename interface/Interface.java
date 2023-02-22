@@ -663,7 +663,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						//System.out.println("ip = " + forno1.getIp());
 						try {
 							TCPServer.send(forno1.getIp(), s);
-							TCPServer.addGrafico(forno1.calcularQuantidadeBiscoitos());
+							TCPServer.addGrafico(forno1.getId() + "#" + forno1.calcularQuantidadeBiscoitos());
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -692,7 +692,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						//System.out.println("ip = " + forno2.getIp());
 						try {
 							TCPServer.send(forno2.getIp(), a);
-							TCPServer.addGrafico(forno2.calcularQuantidadeBiscoitos());
+							TCPServer.addGrafico(forno2.getId() + "#" + forno2.calcularQuantidadeBiscoitos());
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
