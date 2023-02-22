@@ -1,7 +1,5 @@
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -84,7 +82,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
 	//Cria os tipos dos biscoitos
 	private String[] tipos = { "Comum", "Recheado"};
-	private List<String> listaProducao = new ArrayList<>();
 	private JComboBox<String> listaTiposBiscoitos = new JComboBox<>(tipos); // Cria a lista de tipos de biscoitos.
 
 	// Cria os botões.
@@ -704,10 +701,6 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 			}).start();
 	}
 
-	public String getRelatorio(){
-		System.out.println(listaProducao.toString());
-		return listaProducao.toString();
-	}
 		
 	/**
 	 * Método que simula o tempo de espera.
