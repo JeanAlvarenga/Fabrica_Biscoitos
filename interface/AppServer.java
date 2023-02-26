@@ -1,7 +1,7 @@
 /**
  * Classe principal do programa que inicia a interface gráfica.
  * @author Jean P. Alvarenga
- * @version 4.7
+ * @version 5.0
  */
 
 public class AppServer {

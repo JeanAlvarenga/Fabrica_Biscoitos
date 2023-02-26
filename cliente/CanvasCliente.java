@@ -11,8 +11,8 @@ public class CanvasCliente extends JPanel{
     public CanvasCliente(){
         super.setLayout(null);
         try{
-            image = ImageIO.read(new File("C:\\Users\\jeana\\OneDrive\\Documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundoInterfaceClient.png"));
             //image = ImageIO.read(new File("C:\\Users\\jeana\\OneDrive\\Documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundoInterfaceClient.png"));
+            image = ImageIO.read(new File("C:\\Users\\jeana\\OneDrive\\Documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundoInterfaceClient.png"));
         }catch(Exception e){
             System.out.println("Erro ao carregar imagem");
         }
@@ -21,6 +21,6 @@ public class CanvasCliente extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image.getScaledInstance(1117, 719, 0), 0, 0, null);
+        g.drawImage(image.getScaledInstance(1177, 719, 0), 0, 0, null);
     }
 }

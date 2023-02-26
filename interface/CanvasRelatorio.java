@@ -9,8 +9,8 @@ public class CanvasRelatorio extends JPanel {
     public CanvasRelatorio(){
         super.setLayout(null);
         try{
-            image = ImageIO.read(new File("C:\\Users\\jeana\\OneDrive\\documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundoRelatorio.png"));
             //image = ImageIO.read(new File("C:\\Users\\jeana\\OneDrive\\documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundoRelatorio.png"));
+            image = ImageIO.read(new File("D:\\documentos\\GitHub\\Fabrica_Biscoitos\\imagens\\fundoRelatorio.png"));
         }catch(Exception e){
             System.out.println("Erro ao carregar imagem");
         }
@@ -18,6 +18,6 @@ public class CanvasRelatorio extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image.getScaledInstance(1117, 719, 0), 0, 0, null);
+        g.drawImage(image.getScaledInstance(1177, 719, 0), 0, 0, null);
     }
 }

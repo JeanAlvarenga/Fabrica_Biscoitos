@@ -19,7 +19,7 @@ import com.google.common.collect.Multimap;
 
 public class TCPServer {
     private Interface interfaceGrafica;
-    private AccessControl controleDeAcesso;
+    private static AccessControl controleDeAcesso;
     private String permissao;
     private static Multimap<String, String> pedidos = ArrayListMultimap.create();
     private static List<String> listaDeBiscoitos = new ArrayList<String>(); // Lista de pedidos do relatorio.
@@ -28,7 +28,9 @@ public class TCPServer {
         interfaceGrafica = new Interface();
         interfaceGrafica.executar();
         controleDeAcesso = new AccessControl();
-        cadastrarCliente();
+        cadastrarCliente("Jean", "123");
+        cadastrarCliente("Daniel", "12345678");
+        cadastrarCliente("Samuel", "12345678");
     }
     public static void send(String ip, String data) throws IOException { 
         pedidos.put(ip, data); // Adiciona os dados de produçao na lista de pedidos atraves do ip do cliente.
@@ -51,7 +53,7 @@ public class TCPServer {
         }
     }
 
-    public class ClientHandler extends Thread {
+    public class ClientHandler extends Thread { // Classe que trata os pedidos dos clientes.
         private Socket clientSocket;
 
         ClientHandler(Socket clientSocket) {
@@ -141,9 +143,7 @@ public class TCPServer {
         }
 
     }
-    public void cadastrarCliente(){
-        controleDeAcesso.registerUser("Jean", "123");
-        controleDeAcesso.registerUser("Daniel", "12345678");
-        controleDeAcesso.registerUser("Samuel", "12345678");
+    public static void cadastrarCliente(String user, String password){
+        controleDeAcesso.registerUser(user, password);
     }
 }

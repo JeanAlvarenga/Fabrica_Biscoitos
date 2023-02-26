@@ -21,7 +21,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class InterfaceClient extends JFrame implements ActionListener {
 
-    private JFrame janela = new JFrame("Add request");
+    private JFrame janela = new JFrame("Add request (Client)");
     private JFrame janelaGrafico = new JFrame("Fetch report");
     // Textos antes dos ingredientes:
 	private JLabel tipo = new JLabel("Tipo:");
@@ -55,7 +55,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
 
     public void desenharGraficos() {
         // Configurações da janela:
-		janela.setBounds(0, 0, 1132, 719);
+		janela.setBounds(0, 0, 1177, 719);
         tipo.setBounds(10, 10, 30, 20);
         listaTiposBiscoitos.setBounds(50, 10, 100, 20);
 		one.setBounds(160, 10, 70, 20);
@@ -73,7 +73,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
 		botao1.setBounds(720, 10, 110, 20);
         botao2.setBounds(720, 40, 110, 20);
         botao3.setBounds(840, 10, 110, 20);
-        scrooll.setBounds(0, 210, 1117, 529);
+        scrooll.setBounds(0, 210, 1177, 529);
 		// Tamanho da barra
         scrooll.setPreferredSize(new Dimension(250, 250));
 
@@ -190,7 +190,7 @@ public class InterfaceClient extends JFrame implements ActionListener {
                         
                     }
                 }
-                JFreeChart grafico = ChartFactory.createBarChart3D("Relatório de Tendência de Produção", "Pedidos", "Quantidade de Pedidos", barra, PlotOrientation.VERTICAL, true, true, false); //Cria o gráfico de barras.
+                JFreeChart grafico = ChartFactory.createBarChart3D("Relatório de Tendência de Produção", "Pedidos", "Quantidade de Biscoitos Fabricados", barra, PlotOrientation.VERTICAL, true, true, false); //Cria o gráfico de barras.
                 ChartPanel painel = new ChartPanel(grafico); //Cria um painel para o gráfico.
                 janelaGrafico.add(painel); //Adiciona o painel na janela.
 

@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
@@ -30,8 +31,9 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	private static Biscoito forno2;
 
     // Icone das imagens
-    private JFrame janela = new JFrame("Add request"); // Cria a janela com o titulo "Add request".
-	private JFrame relatorio = new JFrame("Report"); // Cria a janela com o titulo "Start process".
+    private JFrame janela = new JFrame("Add request (Server)"); // Cria a janela com o titulo "Add request".
+	private JFrame relatorio = new JFrame("Report (Server)"); // Cria a janela com o titulo "Start process".
+	private JFrame addCliente = new JFrame("Add Cliente (Server)"); // Cria a janela com o titulo "Add Cliente".
 	// Imagens das Etapas:
 	private ImageIcon imGP1 = new ImageIcon(getClass().getResource("gotapreta.png"));
 	private ImageIcon imGA1 = new ImageIcon(getClass().getResource("gotaAzul.png"));
@@ -61,11 +63,15 @@ public class Interface extends JFrame implements ActionListener, Runnable{
     private JLabel one = new JLabel("Ingredient 1"); // Cria o label "Ingredient 1".
 	private JLabel two = new JLabel("Ingredient 2"); // Cria o label "Ingredient 2".
 	private JLabel three = new JLabel("Ingredient 3"); // Cria o label "Ingredient 3".
+	private JLabel clienteLabel = new JLabel("Customer:"); // Cria o label "Customer".
+	private JLabel passwordLabel = new JLabel("Password:"); // Cria o label "Password".
 
 	// Cria os campos de ingredientes.
 	private JTextField primeiro = new JTextField(10);
 	private JTextField segundo = new JTextField(10);
 	private JTextField terceiro = new JTextField(10);
+	private JTextField cliente = new JTextField(10);
+	private JTextField password = new JTextField(10);
 
 	// Cria os campos da produção.
 	private JTextField a1 = new JTextField(6);
@@ -88,6 +94,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	private JButton botao1 = new JButton(" Add request "); // Cria o botão com o texto " Adicionar pedido ".
 	private JButton botao2 = new JButton("  Start process  "); // Cria o botão com o texto " iniciar processo ".
 	private JButton botao3 = new JButton("  Open report "); // Cria o botão com o texto " parar processo ".
+	private JButton botao4 = new JButton("  Register customer "); // Cria o botão com o texto " parar processo ".
+	private JButton botao5 = new JButton("  Add customer "); // Cria o botão com o texto " parar processo ".
 	// Cria os labels das filas:
 	private JLabel texttotal = new JLabel(" Total orders: ");
 	private JLabel texTamanhoFila1 = new JLabel(" Queue size 1: ");
@@ -101,6 +109,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	// Cria o painel.
 	private Canvas canvas = new Canvas();
 	private CanvasRelatorio canvasRelatorio = new CanvasRelatorio();
+	private JPanel painelAddCliente = new JPanel(); // Cria o painel.
 	// Cria Area de texto.
 	private JTextArea relatorioArea = new JTextArea(100, 100);
 	JScrollPane scrooll = new JScrollPane(relatorioArea);
@@ -142,6 +151,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		tamFila3.setBounds(88, 634, 110, 20);
 		botao2.setBounds(450, 60, 160, 20);
 		botao3.setBounds(670, 60, 160, 20);
+		botao4.setBounds(890, 60, 160, 20);
 		a1.setBounds(145, 278, 70, 20);
 		a2.setBounds(260, 278, 70, 20);
 		a3.setBounds(395, 278, 70, 20);
@@ -176,6 +186,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		canvas.add(tamFila3);
 		canvas.add(botao2);
 		canvas.add(botao3);
+		canvas.add(botao4);
 		canvas.add(a1);
 		canvas.add(a2);
 		canvas.add(a3);
@@ -213,13 +224,35 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
 	//Desenhar janela de relatorio
 	private void desenharGraficoRelatorio(){
-		relatorio.setBounds(0, 0, 1117, 719);
-		scrooll.setBounds(0, 190, 1117, 529);
+		relatorio.setBounds(0, 0, 1177, 719);
+		scrooll.setBounds(0, 190, 1177, 529);
 		// Tamanho da barra
         scrooll.setPreferredSize(new Dimension(250, 250));
 		canvasRelatorio.add(scrooll);
 		relatorio.add(canvasRelatorio);
 	}
+
+	//Desenhar janela de relatorio
+	private void desenharGraficoAddCliente(){
+		addCliente.setBounds(0, 0, 600, 300);
+		//painelAddCliente.setLayout(null);
+		painelAddCliente.setBounds(0, 0, 600, 300);
+		clienteLabel.setBounds(0, 0, 600, 300);
+		passwordLabel.setBounds(0, 50, 600, 300);
+		cliente.setBounds(0, 0, 600, 300);
+		password.setBounds(0, 50, 600, 300);
+		botao5.setBounds(0, 100, 600, 300);
+
+		painelAddCliente.add(clienteLabel);
+		painelAddCliente.add(cliente);
+		painelAddCliente.add(passwordLabel);
+		painelAddCliente.add(password);
+		painelAddCliente.add(botao5);
+
+		addCliente.add(painelAddCliente);
+	
+	}
+
 	//
     private void botao(){
         //Quando clicamos no botão é executado o método addBiscoito da classe Pedido.
@@ -230,6 +263,12 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 
 		//Quando clicamos no botão é executado o método gerar relatorio
 		botao3.addActionListener(this);
+
+		//Quando clicamos no botão é executado o método criar cliente
+		botao4.addActionListener(this);
+
+		//Quando clicamos no botão é executado o método add cliente
+		botao5.addActionListener(this);
     }
 
 	/**
@@ -275,6 +314,26 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 		// Trata os eventos para o botao "botao3" (Gerar relatório).
 		if(e.getSource() == botao3){
             relatorio.setVisible(true);
+		}
+
+		// Trata os eventos para o botao "botao4" (Criar cliente).
+		if(e.getSource() == botao4){
+			addCliente.setVisible(true);
+		}
+
+		// Trata os eventos para o botao "botao5" (Adicionar cliente).
+		if(e.getSource() == botao5){
+			String nome = cliente.getText();
+			String senha = password.getText();
+			//Verifica se os campos estão preenchidos.
+			if(nome.isEmpty() || senha.isEmpty()){
+				JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+				return;
+			}
+			else{
+				TCPServer.cadastrarCliente(nome, senha);
+				JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso!");
+			}
 		}
 	}
 
@@ -335,6 +394,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	public void executar(){
 		desenharGraficos();
 		desenharGraficoRelatorio();
+		desenharGraficoAddCliente();
 		botao();
 
 	}
