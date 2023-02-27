@@ -1,3 +1,9 @@
+/**
+ * Classe responsável por criar o JSON e enviar para o servidor
+ * @author Jean P. Alvarenga
+ * @version 5.0
+ */
+
 package cliente;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,6 +17,19 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class TCPClient {
 
+    /**
+     * Método responsável por criar o JSON e enviar para o servidor
+     * @param requisicao
+     * @param ip
+     * @param us
+     * @param pass
+     * @param tip
+     * @param i1
+     * @param i2
+     * @param i3
+     * @return
+     * @throws Exception
+     */
     public String createJSON(String requisicao, String ip, String us, String pass, String tip, String i1, String i2, String i3) throws Exception{
         Socket socket = new Socket(ip, 9090); //localhost
         PrintWriter write = new PrintWriter(socket.getOutputStream(), true);
@@ -42,6 +61,6 @@ public class TCPClient {
         reader.close();
         write.close();
         socket.close();
-        return message;
+        return message; //retorna a mensagem do servidor
     }
 }

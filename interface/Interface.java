@@ -1,3 +1,9 @@
+/**
+ * Classe responsável por criar a interface do servidor.
+ * @author Jean P. Alvarenga
+ * @version 5.0
+ */
+
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
@@ -126,6 +132,7 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	private Semaphore semaforo33 = new Semaphore(1); // Cria o semáforo "add ingrediente 3 linha 3" com 1 permissões.
 	private Semaphore semaforoForno1 = new Semaphore(1); // Cria o semáforo "add forno1" com 1 permissões.
     private Semaphore semaforoForno2 = new Semaphore(1); // Cria o semáforo "add forno2" com 1 permissões.
+	
 	// Desenha o painel.
     private void desenharGraficos() {
 		// Configurações da janela:
@@ -276,6 +283,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 	 * Botão 1: Adicionar pedido.
 	 * Botão 2: Iniciar processo.
 	 * Botão 3: Gerar relatorio.
+	 * Botão 4: Criar cliente.
+	 * Botão 5: Adicionar cliente.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -748,8 +757,8 @@ public class Interface extends JFrame implements ActionListener, Runnable{
 						relatorioArea.append(a + "\n");
 						//System.out.println("ip = " + forno2.getIp());
 						try {
-							TCPServer.send(forno2.getIp(), a);
-							TCPServer.addGrafico(forno2.getId() + "#" + forno2.calcularQuantidadeBiscoitos());
+							TCPServer.send(forno2.getIp(), a); // Envia a mensagem dos pedidos.
+							TCPServer.addGrafico(forno2.getId() + "#" + forno2.calcularQuantidadeBiscoitos()); // Adiciona o biscoito no grafico.
 						} catch (IOException e) {
 							e.printStackTrace();
 						}

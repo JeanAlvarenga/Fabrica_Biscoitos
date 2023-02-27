@@ -1,3 +1,9 @@
+/**
+ * Classe responsável por criar o servidor TCP.
+ * @author Jean P. Alvarenga
+ * @version 5.0
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,13 +13,10 @@ import java.net.Socket;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -32,14 +35,36 @@ public class TCPServer {
         cadastrarCliente("Daniel", "12345678");
         cadastrarCliente("Samuel", "12345678");
     }
+
+    /**
+     * Método responsável adicionar os dados de produçao na lista de pedidos atraves do ip do cliente..
+     * @param String ip
+     * @param String data
+     */
     public static void send(String ip, String data) throws IOException { 
-        pedidos.put(ip, data); // Adiciona os dados de produçao na lista de pedidos atraves do ip do cliente.
+        pedidos.put(ip, data);
     }
 
+    /**
+     * Método responsável por adicionar o pedido na lista de pedidos
+     * @param String quantidadeBiscoitosProduzidos
+     */
     public static void addGrafico(String quantidadeBiscoitosProduzidos) {
-        listaDeBiscoitos.add(quantidadeBiscoitosProduzidos); // Adiciona o pedido na lista de pedidos.
+        listaDeBiscoitos.add(quantidadeBiscoitosProduzidos); 
     }
 
+    /**
+     * Método responsável por cadastrar os clientes.
+     * @param String user
+     * @param String password
+     */
+    public static void cadastrarCliente(String user, String password){
+        controleDeAcesso.registerUser(user, password);
+    }
+
+    /**
+     * Método responsável por iniciar o servidor.
+     */
     public void startServer() {
         try (ServerSocket serverSocket = new ServerSocket(9090)) {
             while (true) {
@@ -53,10 +78,13 @@ public class TCPServer {
         }
     }
 
-    public class ClientHandler extends Thread { // Classe que trata os pedidos dos clientes.
+    /**
+     * Classe responsável por tratar os pedidos dos clientes herdando a classe Thread.
+     */
+    public class ClientHandler extends Thread { 
         private Socket clientSocket;
 
-        ClientHandler(Socket clientSocket) {
+        ClientHandler(Socket clientSocket) { // Construtor da classe.
             this.clientSocket = clientSocket;
         }
 
@@ -93,10 +121,12 @@ public class TCPServer {
                     ing3 = Double.parseDouble((String)jsonObject.get("Ing3"));
 
                     ObjectNode response = mapper.createObjectNode();
-                    // Adiciona o pedido na fila.
+
+                    // Verifica se o usuário e senha são válidos.
                     if(controleDeAcesso.checkAccess(user, password)){
                         System.out.println("Acesso permitido!");
                         permissao = "                   Acesso permitido!";
+                        // Adiciona o pedido na fila.
                         if(requisicao.equals("Pedido")){
                             interfaceGrafica.addPedido(user, password, ip, ing1, ing2, ing3, tipo);
 
@@ -108,11 +138,13 @@ public class TCPServer {
                             writer.println("Recebido.");
 
                         }
+                        // Envia a lista de pedidos para o cliente que solicitou.
                         else if(requisicao.equals("requisicao")){
                             response.put("status", "Pedido concluido");  
                             response.put("message", pedidos.get(ip).toString());
                             writer.println(response.toString());
                         }
+                        // Envia os dados para o grafico.
                         else if(requisicao.equals("estatistica")){
                             response.put("status", "Feito!");
                             String lista = "";
@@ -142,8 +174,5 @@ public class TCPServer {
             }
         }
 
-    }
-    public static void cadastrarCliente(String user, String password){
-        controleDeAcesso.registerUser(user, password);
     }
 }

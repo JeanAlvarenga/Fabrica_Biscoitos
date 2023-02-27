@@ -1,3 +1,10 @@
+/**
+ * Classe responsável por criar a interface do cliente.
+ * @author Jean P. Alvarenga
+ * @version 5.0
+ */
+
+
 package cliente;
 
 import javax.swing.JButton;

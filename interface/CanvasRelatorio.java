@@ -1,3 +1,9 @@
+/**
+ * Classe responsável por criar o painel de fundo da interface do relatório do servidor.
+ * @author Jean P. Alvarenga
+ * @version 5.0
+ */
+
 import javax.swing.JPanel;
 import java.io.File;
 import javax.imageio.ImageIO;

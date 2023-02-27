@@ -1,3 +1,10 @@
+/**
+ * Classe responsável por criar o painel de fundo da interface do cliente.
+ * @author Jean P. Alvarenga
+ * @version 5.0
+ */
+
+
 package cliente;
 import javax.swing.JPanel;
 import java.io.File;
